@@ -1,0 +1,26 @@
+{
+  "name": "blog",
+  "version": "0.0.0",
+  "description": "app server behind relfor.co",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/relfor/blog.git"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "dependencies": {
+	"express":"3.1.1",
+	"mysql":"latest",
+	"amazon-ses":"latest",
+	"jade":"latest"
+  },
+
+  "author": "relfor",
+  "license": "Other",
+  "gitHead": "ab610606bc00ec0b4ffe723ba81bf48e504faa5d"
+}
