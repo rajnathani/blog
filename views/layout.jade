@@ -1,0 +1,29 @@
+doctype 5
+
+html(dir="ltr")
+    head
+        meta(charset="utf-8")
+        meta(description="Relfor's Blog: where he shares his tiny bit of his life.")
+        meta(keywords="relfor")
+        title Relfor
+        link(rel="stylesheet", type="text/css", href="../static/css/bundle.css")
+
+    body
+        div#content
+            #left-side
+                h1#head-logo
+                    a(href='/') Relfor
+                    #left-nav
+                      a.hover-link(href='/about') About
+                      a.hover-link(href='/projects') Projects
+                      form#search-form(method='get', action='/search')
+                        input#query.hover-link(value='Search', type='text', name='query', autocomplete='off')
+                      ul#search-suggestions
+            block right_side
+
+        script(defer, src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
+        script(defer, src="../static/js/lib.js")
+        script(defer, src="../static/js/src.js")
+
+
+

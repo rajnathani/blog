@@ -3,8 +3,8 @@ from iftrue import nerve_js
 import shutil
 import time
 
-SKIN_STATIC_PATH = "/Users/raj/earth/blog/skin/static"
-NERVE_STATIC_PATH = "/Users/raj/earth/blog/nerve/static"
+SKIN_STATIC_PATH = "/Users/relfor/earth/blog/skin/static"
+NERVE_STATIC_PATH = "/Users/relfor/earth/blog/nerve/static"
 
 # Folder names will and should be the same for
 # the prototype (skin) and the working app (nerve)
@@ -35,7 +35,7 @@ JS_LIB_FILES = ['oneminute.js', 'cook.js', 'popscript.js',
 JS_IGNORE = ['jquery.js']
 
 # all css files, which will be added in order
-CSS_FILES = ['chosen.css', 'popscript.css', 'core.css', 'responsive.css']
+CSS_FILES = ['fonts.css', 'chosen.css', 'animations.css','popscript.css', 'core.css', 'responsive.css']
 
 REQ_STATIC_SUB_FOLDERS = [CSS_FOLDER_NAME, JS_FOLDER_NAME, IMGS_FOLDER_NAME]
 for req in REQ_STATIC_SUB_FOLDERS:
@@ -109,7 +109,7 @@ def js():
         full_file_path = file_dict[file_name]
         if visible_file_of_extension(full_file_path, 'js'):
             f = open(full_file_path)
-            js_lib += nerve_js(f.read())
+            js_lib += nerve_js(f.read()) + ";"
             f.close()
             print 'JS FILE ADDED TO FRAMEWORKS & LIBRARIES BUNDLE: %s' % file_name
 
@@ -129,7 +129,7 @@ def js():
     for file_name, full_file_path in file_dict.iteritems():
         if visible_file_of_extension(full_file_path, 'js') and file_name not in (JS_LIB_FILES + JS_IGNORE):
             f = open(full_file_path)
-            js_src += nerve_js(f.read())
+            js_src += nerve_js(f.read()) + ";"
             f.close()
             print 'JS FILE ADDED TO SOURCE BUNDLE: %s' % file_name
 

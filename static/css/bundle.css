@@ -1,3 +1,49 @@
+@font-face {
+    font-family: 'Gabriela';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Gabriela'), local('Gabriela-Regular'), url(http://themes.googleusercontent.com/static/fonts/gabriela/v1/fLaucCvjCt_Hmc9smyo_rHYhjbSpvc47ee6xR_80Hnw.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Open Sans Light'), local('OpenSans-Light'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/DXI1ORHCpsQm3Vp6mXoaTaRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/MTP_ySUJH_bn48VBG8sNSqRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzKRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 300;
+    src: local('Open Sans Light Italic'), local('OpenSansLight-Italic'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxvR_54zmj3SbGZQh3vCOwvY.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 600;
+    src: local('Open Sans Semibold Italic'), local('OpenSans-SemiboldItalic'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxuw_rQOTGi-AJs5XCWaKIhU.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: 700;
+    src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxhbnBKKEOwRKgsHDreGcocg.woff) format('woff');
+}
+
+
+
 /* @group Base */
 .chzn-container {
   font-size: 16px;
@@ -614,27 +660,6 @@
  current color: #ff475a
 */
 
-/*Start of Animations*/
-
-@-webkit-keyframes loading {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-@keyframes loading {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-
-/*End of Animations*/
 
 * {
 
@@ -717,22 +742,32 @@ body {
 .loading {
     display: none;
     font-family: 'Gabriela';
-    font-size: 25px;
-    text-align: center;
-
-    -webkit-animation:loading 500ms infinite alternate;
-    animation:loading 500ms  infinite alternate;
+    -webkit-animation:fade-in-out 500ms infinite alternate;
+    animation:fade-in-out 500ms  infinite alternate;
+}
+.loading:before,.loading:after {
+    font-family: inherit;
 }
 
-.loading:after {
-    content: 'Relfor';
-}
 
 .loading.more-articles {
     margin: 10px 0 20px 0;
     width: 100%;
     max-width: 600px;
 
+    font-size: 25px;
+    text-align: center;
+}
+
+.loading.more-articles:after {
+    content: 'Relfor';
+}
+.loading.more-comments{
+    margin-bottom: 25px;
+    font-size: 20px;
+}
+.loading.more-comments:after {
+    content:'Loading Comments';
 }
 
 a {
@@ -1310,7 +1345,7 @@ div.category-sprite {
 }
 
 #comments-section  ul li {
-    margin-bottom: 29px;
+    margin-bottom: 33px;
     min-height: 80px;
     position: relative;
     list-style-type: none;
@@ -1376,10 +1411,16 @@ div.category-sprite {
 .comment-form textarea {
     width: 510px;
     line-height: 1.5em;
+
 }
 
 .comment-form button {
     display: block;
+}
+
+#bu-post-comment {
+
+    float: right;
 }
 
 .bu-form-reply-comment:after {
@@ -1633,3 +1674,23 @@ div.category-sprite {
     }
 
 }
+@-webkit-keyframes fade-in-out {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes fade-in-out {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+
+
