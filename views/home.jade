@@ -1,0 +1,18 @@
+extends layout
+
+block right_side
+    #right-side.no-animation
+        ul#articles
+            - each article in articles
+                li.article.cf(data-link="#{article._id}")
+                    div
+                        h1.article-head
+                            a.hover-link(href="/article/#{article._id}") #{article.title}
+                        div.article-content #{article.content}
+                    div.article-meta
+                        div(data-timestamp="#{article.created}", data-time-mode="1")
+                        div.categories
+                            - each category in article.categories
+                                a.hover-link(href="/category/#{category}") #{category}
+
+        div.loading.more-articles

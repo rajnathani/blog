@@ -1,0 +1,18 @@
+extends layout
+block right_side
+    #right-side.no-animation
+        #control-panel
+            h1.gab
+                a(href='/control-panel') Control Panel
+                |  > Articles
+            .manage-nav
+                a.button(href='/control-panel/article/create') Write Article
+            table#cp-table.manage-articles.slide-left
+                tbody
+                    - each article in articles
+                        tr(data-link='#{article._id}')
+                            td
+                                a.hover-link(href='/control-panel/article/#{article._id}/edit') #{article.title}
+                            td(data-timestamp='#{article.created}', data-time-mode='2')
+                            td(data-published='#{article.published}')
+                            td

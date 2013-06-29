@@ -4,15 +4,15 @@ var AirForm = require('../helpers/air-form');
 exports.get = function (req, res) {
 
     etc.startMongoDB('Articles', function (err, Articles, db) {
-        if (err){
-            return etc.msg.string.server_problem;
+        if (err) {
+            return res.send(500, etc.msg.server_problem);
         }
-        Articles.find({}, {}, { limit: 4, sort: [
-            ['created', 'desc']
-        ]}).
+        Articles.find({published: true}, {}, { limit: 4, sort: {
+            'created': -1
+        }}).
             toArray(function (err, results) {
                 if (err) {
-                    return res.send(etc.msg.string.server_problem);
+                    return res.send(500, etc.msg.server_problem);
                 }
                 return res.render('home.jade', {articles: results});
             });
@@ -29,20 +29,20 @@ exports.infiniteScroll = function (req, res) {
     var timestamp = parseInt(af.xvalidate('timestamp', 'query', {'has to be': ['int']}));
 
     if (af.noneNull([last_link, timestamp]))
-    etc.startMongoDB('Articles', function (err, Articles, db) {
-        if (err) {
-            return etc.msg.json.empty;
-        }
-        Articles.find({created: {$lte: timestamp}, _id: {$ne: last_link}}, {}, { limit: 3, sort: [
-            ['created', 'desc']
-        ]}).
-            toArray(function (err, results) {
-                if (err) {
-                    return etc.msg.json.empty;
-                }
+        etc.startMongoDB('Articles', function (err, Articles, db) {
+            if (err) {
+                return res.json(etc.json.empty);
+            }
+            Articles.find({created: {$lte: timestamp}, published: true, _id: {$ne: last_link}}, {}, { limit: 3, sort: {
+                'created': -1
+            }}).
+                toArray(function (err, results) {
+                    if (err) {
+                        return res.json(etc.json.empty);
+                    }
 
-                return res.json({more_articles: results});
-            });
+                    return res.json({more_articles: results});
+                });
 
-    });
+        });
 };

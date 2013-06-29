@@ -1,0 +1,34 @@
+Articles:
+    link (_id)
+    title
+    content
+    created
+    updated
+    categories (list of strings)
+    markdown
+    published
+
+ArticleComments:
+    link (_id)
+    comments (list of dictionaries)
+        comment_id
+        email
+        img #gravatar
+        name
+        website
+        content
+        created
+        replies (list of dictionaries)
+            comment_id
+            email
+            img #gravatar
+            name
+            website
+            content
+            created
+
+Categories
+    category (_id)
+    articles (list of strings) #article links
+
+

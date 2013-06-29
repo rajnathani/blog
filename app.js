@@ -1,5 +1,3 @@
-
-
 var express = require('express');
 var http = require('http');
 var path = require('path');
@@ -23,27 +21,27 @@ app.use(app.router);
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+    app.use(express.errorHandler());
 }
 
-function add_route(route, verb, action){
+function add_route(route, verb, action) {
 
 
     //var final_action = etc.blockProtector(action);
     var final_action = action;
 
-    switch(verb.toLowerCase()){
+    switch (verb.toLowerCase()) {
         case 'get':
-                app.get(route, final_action);
+            app.get(route, final_action);
             break;
         case 'post':
-                app.post(route, final_action);
+            app.post(route, final_action);
             break;
         case 'delete':
-                app.delete(route,final_action);
+            app.delete(route, final_action);
             break;
         case 'patch':
-                app.patch(route,final_action);
+            app.patch(route, final_action);
             break;
     }
 }
@@ -51,14 +49,31 @@ function add_route(route, verb, action){
 
 var home = require('./routes/home');
 var article = require('./routes/article');
+var control_panel = require('./routes/control-panel');
 
 
-add_route('/', 'GET', home.get);
-add_route('/_', 'GET', home.infiniteScroll);
 
-add_route('/article/:link', 'GET', article.get);
+add_route('/'                                       ,  'GET'   ,  home.get);
+add_route('/_'                                      ,  'GET'   ,  home.infiniteScroll);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+add_route('/article/:link'                          ,  'GET'   ,  article.get);
+add_route('/article/:link/_comments'                ,  'GET'   ,  article.loadComments);
+add_route('/article/:link/_comments'                ,  'POST'  ,  article.comment);
+
+add_route('/control-panel'                          ,  'GET'   ,  control_panel.get);
+add_route('/control-panel/articles'                 ,  'GET'   ,  control_panel.articles);
+add_route('/control-panel/categories'               ,  'GET'   ,  control_panel.categories);
+add_route('/control-panel/pictures'                 ,  'GET'   ,  control_panel.pictures);
+
+add_route('/control-panel/article/create'           ,  'GET'   ,  control_panel.article_editor.new);
+add_route('/control-panel/_article/create'          ,  'POST'  ,  control_panel.article_editor.post);
+add_route('/control-panel/article/:link/edit'       ,  'GET'   ,  control_panel.article_editor.existing);
+add_route('/control-panel/_article/:link/edit'      ,  'PATCH' ,  control_panel.article_editor.save);
+add_route('/control-panel/_article/:link/publish'   ,  'PATCH' ,  control_panel.article.changePublishStatus);
+add_route('/control-panel/_article/:link/unpublish' ,  'PATCH' ,  control_panel.article.changePublishStatus);
+
+
+http.createServer(app).listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
 
 });

@@ -1,5 +1,5 @@
 var util = require('util');
-var mysql = require('mysql');
+var _ = require('underscore');
 
 var secret = require('../helpers/secret');
 
@@ -12,10 +12,12 @@ exports.startMongoDB = function (collection_name, callback) {
     var Server = require('mongodb').Server;
 
 
-    var db = new Db('blog', new Server('127.0.0.1', 27017, {safe: false}, {auto_reconnect: true}, {w:1}));
+    var db = new Db('blog', new Server('127.0.0.1', 27017, {safe: false}, {auto_reconnect: true}, {w: 1}));
     db.open(function () {
         if (collection_name.substring) {
-            db.collection(collection_name, function(err,collection){callback(err,collection,db)});
+            db.collection(collection_name, function (err, collection) {
+                callback(err, collection, db)
+            });
         } else {
             callback(db);
         }
@@ -24,22 +26,21 @@ exports.startMongoDB = function (collection_name, callback) {
 };
 
 
-
 exports.msg = {
-    string:
-    {
-        server_problem: 'The server failed. Sorry, try again sometime later.',
-        fishy: 'Something went wrong!',
-        404: 'Not Found',
-        did_not_request_email:'If you did not request this for your email address then please ignore this email or reply back with a complaint.',
-        empty:"."
-    },
-    json:
-    {
-        server_problem:{'error': 'The server failed. Sorry, try again sometime later.'},
-        fishy:{'error': 'Something went wrong!'}
-    }
+
+    server_problem: 'The server failed. Sorry, try again sometime later.',
+    fishy: 'Something went wrong!',
+    404: 'Not Found',
+    did_not_request_email: 'If you did not request this for your email address then please ignore this email or reply back with a complaint.',
+    empty: "."
+
 };
+
+exports.json = {
+        server_problem: {'error': exports.msg.server_problem},
+        fishy: {'error': exports.msg.fishy},
+        empty: {'empty': exports.msg.empty}
+    };
 
 
 /**
@@ -68,7 +69,15 @@ exports.cookieJar = function (res, email) {
 };
 
 exports.error = {
-    duplicate:11000
+    duplicate: 11000
 };
 
+exports.currentTimestamp = function () {
+    return parseInt(Date.now() / 1000)
+};
 
+exports.primaryKeysList = function(dict_array){
+  return _.map(dict_array, function(cur){
+      return cur._id;
+  });
+};

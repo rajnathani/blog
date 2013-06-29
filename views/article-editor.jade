@@ -1,0 +1,39 @@
+extends layout
+
+block right_side
+    #right-side
+        #article-editor.cf
+            aside
+                textarea#x-head.article-head(placeholder='Title', maxlength='140', rows='1') #{article.title}
+                textarea#x-body.article-content(placeholder='Content', rows='10') #{article.markdown}
+                #article-preview.article-content(style='display: none;')
+            aside
+                input#number-of-categories(name='number-of-categories', type='hidden', value='#{article.categories.length}')
+                select#category-placeholder(style='display: none;')
+                    - each category in all_categories
+                        option #{category}
+
+                button#bu-save-article.px40(data-article-created='#{article_created}')
+                button#bu-preview-article(value='preview-article') Preview
+                //ae is short for article editor
+                #ae-article-read-only-details
+                    div(data-published='0')
+                    #ae-created
+                        | created&nbsp;
+                        span(data-timestamp='#{article.created}', data-time-mode='2')
+                    #ae-last-saved
+                        | last saved&nbsp;
+                        span(data-timestamp='#{article.updated}')
+                button#bu-add-category(style='display: block;') Add Category
+                button#bu-remove-category(style='display: block; visibility: hidden;') Remove Category
+
+                - for (var i in article.categories){
+                select.x-article-category(id="category-#{parseInt(i)+1}")
+                    - for (var j in all_categories) {
+                    -     if (all_categories[j] === article.categories[i]) {
+                    option(selected="selected") #{all_categories[j]}
+                    -   } else {
+                    option #{all_categories[j]}
+                    - }
+                    - }
+                - }

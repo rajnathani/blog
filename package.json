@@ -17,7 +17,10 @@
 	"express":"3.1.1",
 	"mongodb":"latest",
 	"amazon-ses":"latest",
-	"jade":"latest"
+	"jade":"latest",
+	"gravatar":"latest",
+	"marked":"latest",
+	"underscore":"latest"
   },
 
   "author": "relfor",

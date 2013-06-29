@@ -4,3 +4,23 @@ block right_side
     #right-side
         .article.cf
             div
+                h1.article-head #{article.title}
+                .article-content #{article.content}
+            .article-meta
+                div(data-timestamp='#{article.created}', data-time-mode='1')
+                .categories
+                    each category in article.categories
+                        a.hover-link(href='/category/#{category}') #{category}
+
+            #comments-section
+                h4.gab Comments Section
+                .loading.more-comments
+                ul
+                h4.gab Leave a Comment
+                #leave-comment.cf.comment-form
+                    .non-comment-details.cf
+                        input(type='text', placeholder='Full Name', maxlength='100')
+                        input(type='email', placeholder='Email Address', maxlength='255')
+                        input(type='url', placeholder='Website/Blog (Optional)', maxlength='100')
+                    textarea(placeholder='Comment...', maxlength='1000', rows='4')
+                    button#bu-post-comment Post
