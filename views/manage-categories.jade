@@ -2,8 +2,21 @@ extends layout
 block right_side
     #right-side.no-animation
         #control-panel
-            h1.gab Control Panel
-            #cp-nav.slide-left
-              a.hover-link.gab(href='/control-panel/articles') Articles
-              a.hover-link.gab(href='/control-panel/categories') Categories
-              a.hover-link.gab(href='/control-panel/pictures') Pictures
+            h1.gab
+                a(href='/control-panel') Control Panel
+                | &nbsp;> Categories
+            .gab.manage-nav
+                button#bu-new-category.hover-link New Category
+            table#cp-table.manage-categories.slide-left
+                tbody
+                    - each category in categories
+                        tr(data-name='#{category._id}')
+                            td
+                                a.hover-link(href='/category/#{category._id}') #{category._id}
+                            td
+                                - if (category.articles.length || category.articles.length !== 1) {
+                                | #{category.articles.length} Articles
+                                - } else {
+                                | 1 Article
+                                - }
+                            td

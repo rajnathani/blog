@@ -1,6 +1,7 @@
 var etc = require('../helpers/etc');
 var gravatar = require('gravatar');
 var AirForm = require('../helpers/air-form');
+var _ = require('underscore');
 
 exports.get = function (req, res) {
     var af = new AirForm(req);
@@ -70,9 +71,9 @@ exports.comment = function (req, res) {
 
 
     if (!af.isValid()) {
-        console.log('noval');
         return res.json(etc.json.fishy);
     }
+    email = email.toLowerCase();
 
     // Read the docstring above
     var reply_comment = isReplyComment(parent_comment_id);
@@ -94,6 +95,10 @@ exports.comment = function (req, res) {
             var common_comment_dict = {comment_id: comment_id, name: name,
                 email: email, website: website, content: content, img: gravatar.url(email, {s: 70}),
                 created: etc.currentTimestamp()};
+
+            if (_.contains(['relfor@outlook.com', 'me@relfor.co'], email)){
+                common_comment_dict.relfor =true;
+            }
             if (reply_comment) {
                 comments[comments.indexOf(listHasCommentID(comments, parent_comment_id))].replies.push(common_comment_dict);
             } else {

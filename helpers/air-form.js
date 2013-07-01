@@ -11,6 +11,7 @@ var AirForm = function (req) {
         this.valid = true;
     };
 
+
     this.xvalidate = function (name, type, dict) {
         var val;
         if (type === 'params') {
@@ -36,6 +37,8 @@ var AirForm = function (req) {
             this.valid = false;
             return null;
         }
+
+        dict.type = dict.type ? dict.type : 'string';
         var v;
         for (var k in dict) {
             v = dict[k];

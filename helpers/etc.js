@@ -12,7 +12,7 @@ exports.startMongoDB = function (collection_name, callback) {
     var Server = require('mongodb').Server;
 
 
-    var db = new Db('blog', new Server('127.0.0.1', 27017, {safe: false}, {auto_reconnect: true}, {w: 1}));
+    var db = new Db('blog', new Server('127.0.0.1', 27017, { auto_reconnect: true}), {safe:true});
     db.open(function () {
         if (collection_name.substring) {
             db.collection(collection_name, function (err, collection) {

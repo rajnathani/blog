@@ -1,0 +1,3 @@
+
+
+- add database close calls where missing

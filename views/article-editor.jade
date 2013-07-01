@@ -17,7 +17,7 @@ block right_side
                 button#bu-preview-article(value='preview-article') Preview
                 //ae is short for article editor
                 #ae-article-read-only-details
-                    div(data-published='0')
+                    div(data-published='#{article.published}')
                     #ae-created
                         | created&nbsp;
                         span(data-timestamp='#{article.created}', data-time-mode='2')

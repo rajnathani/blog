@@ -66,12 +66,14 @@ add_route('/control-panel/categories'               ,  'GET'   ,  control_panel.
 add_route('/control-panel/pictures'                 ,  'GET'   ,  control_panel.pictures);
 
 add_route('/control-panel/article/create'           ,  'GET'   ,  control_panel.article_editor.new);
-add_route('/control-panel/_article/create'          ,  'POST'  ,  control_panel.article_editor.post);
+add_route('/control-panel/_articles'                ,  'POST'  ,  control_panel.article_editor.post);
 add_route('/control-panel/article/:link/edit'       ,  'GET'   ,  control_panel.article_editor.existing);
-add_route('/control-panel/_article/:link/edit'      ,  'PATCH' ,  control_panel.article_editor.save);
+add_route('/control-panel/_article/:link'           ,  'PATCH' ,  control_panel.article_editor.save);
 add_route('/control-panel/_article/:link/publish'   ,  'PATCH' ,  control_panel.article.changePublishStatus);
 add_route('/control-panel/_article/:link/unpublish' ,  'PATCH' ,  control_panel.article.changePublishStatus);
-
+add_route('/control-panel/_article/:link'           ,  'DELETE',  control_panel.article.delete);
+add_route('/control-panel/_categories'              ,  'POST'  ,  control_panel.category.post);
+add_route('/control-panel/_category/:name'          ,  'DELETE',  control_panel.category.delete);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));

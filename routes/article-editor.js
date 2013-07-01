@@ -35,13 +35,13 @@ function uniqueLink(generated_link, similar_links_dict_array) {
     // Check if either (1) there are no similar links (2) the generated
     // link is not contained in the similar links. In any of these cases
     // the generated link is unique
-    if (similar_links.length || !_.contains(similar_links, generated_link))
+    if (!similar_links.length || !_.contains(similar_links, generated_link))
         return generated_link;
 
     // Attempting to make the generated link unique by added
     // a hyphen and number (1 to infinite) appended to it
     var attempt;
-    for (var i = 1; ; i++) {
+    for (var i = 2; ; i++) {
         attempt = generated_link + "-" + i;
         if (!_.contains(similar_links, attempt)) return attempt;
     }
@@ -52,7 +52,7 @@ exports.new = function (req, res) {
     allCategories(function (err, all_categories, db) {
         if (err) return res.send(etc.msg.server_problem);
         return res.render('article-editor', {article: {title: "", markdown: "", created: 0, updated: 0,
-            categories: []}, all_categories: all_categories, article_created:false});
+            published: false, categories: []}, all_categories: all_categories, article_created: false});
     });
 };
 
@@ -64,11 +64,10 @@ exports.post = function (req, res) {
     var markdown = af.xvalidate('markdown', 'body', {size: [0, 999999999]});
     var categories = af.xvalidate('categories', 'body');
 
-    console.log(categories);
+
 
 
     if (!af.isValid()) {
-        console.log([title, markdown, categories]);
         return res.json(etc.json.fishy);
     }
 
@@ -91,7 +90,14 @@ exports.post = function (req, res) {
                         created: etc.currentTimestamp(), updated: etc.currentTimestamp()},
                     function (err) {
                         if (err) return res.json(etc.json.server_problem);
-                        return res.json({link: unique_link});
+                        db.collection('ArticleComments', function (err, ArticleComments) {
+                            if (err) return res.json(etc.json.server_problem);
+                            ArticleComments.insert({_id:unique_link, 'comments': []}, function (err) {
+                                return res.json({link: unique_link});
+
+                            })
+                        })
+
                     });
             })
 
@@ -120,7 +126,7 @@ exports.existing = function (req, res) {
                 if (err) return res.send(500, etc.msg.server_problem);
                 if (!article) return res.send(404, etc.msg['404']);
 
-                return res.render('article-editor', {article: article, all_categories: all_categories, article_created:true});
+                return res.render('article-editor', {article: article, all_categories: all_categories, article_created: true});
 
             });
         });
@@ -153,7 +159,7 @@ exports.save = function (req, res) {
             if (err) return res.json(etc.json.server_problem);
             Articles.update({_id: link}, { $set: {title: title, markdown: markdown, categories: categories,
                     content: markdown,
-                     updated: etc.currentTimestamp()}},
+                    updated: etc.currentTimestamp()}},
                 function (err) {
                     if (err) return res.json(etc.json.server_problem);
                     return res.json(etc.json.empty);
