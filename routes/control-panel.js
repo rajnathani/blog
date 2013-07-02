@@ -2,6 +2,8 @@ var etc = require('../helpers/etc');
 var article_editor = require('../routes/article-editor');
 var AirForm = require('../helpers/air-form');
 
+var fs = require('fs');
+
 exports.article_editor = article_editor;
 
 exports.get = function (req, res) {
@@ -30,7 +32,10 @@ exports.article = {
         if (!af.isValid()) return res.json(etc.json.fishy);
 
         etc.startMongoDB('Articles', function (err, Articles, db) {
-            if (err) {db.close();return res.json(etc.json.server_problem);}
+            if (err) {
+                db.close();
+                return res.json(etc.json.server_problem);
+            }
             Articles.update({_id: link}, {$set: {published: publish}}, function (err) {
                 db.close();
                 if (err) return res.json(etc.msg.server_problem);
@@ -48,11 +53,20 @@ exports.article = {
         var error_only_comments_deleted = 'Deletion process left incomplete. Article comments deleted, remaining data still undeleted';
 
         etc.startMongoDB('ArticleComments', function (err, ArticleComments, db) {
-            if (err) {db.close();return res.json({'error': error_not_initiated});}
+            if (err) {
+                db.close();
+                return res.json({'error': error_not_initiated});
+            }
             ArticleComments.remove({_id: link}, function (err) {
-                if (err) {db.close();return res.json({'error': error_not_initiated});}
+                if (err) {
+                    db.close();
+                    return res.json({'error': error_not_initiated});
+                }
                 db.collection('Articles', function (err, Articles) {
-                    if (err) {db.close();return res.json({'error': error_only_comments_deleted});}
+                    if (err) {
+                        db.close();
+                        return res.json({'error': error_only_comments_deleted});
+                    }
                     Articles.remove({_id: link}, function (err) {
                         db.close();
                         if (err) return res.json({'error': error_only_comments_deleted});
@@ -71,7 +85,10 @@ exports.category = {
         var name = af.xvalidate('name', 'body', {size: [1, 40]});
         if (!name) return res.json(etc.json.fishy);
         etc.startMongoDB('Categories', function (err, Categories, db) {
-            if (err) {db.close();return res.json(etc.json.server_problem);}
+            if (err) {
+                db.close();
+                return res.json(etc.json.server_problem);
+            }
             Categories.insert({_id: name, articles: []}, function (err) {
                 db.close();
                 if (err) return res.json(etc.json.server_problem);
@@ -91,7 +108,7 @@ exports.category = {
                 if (err) return res.json(etc.json.server_problem);
                 db.collection('Articles', function (err, Articles) {
                     if (err) return res.json({'etc': 'Server Problem: Deletion process incomplete, categories undeleted from articles'});
-                    Articles.update({}, {$pull: {categories: name}}, {multi:true}, function (err) {
+                    Articles.update({}, {$pull: {categories: name}}, {multi: true}, function (err) {
                         db.close();
                         if (err) return res.json({'etc': 'Server Problem: Deletion process incomplete, categories undeleted from articles'});
                         return res.json({});
@@ -114,5 +131,31 @@ exports.categories = function (req, res) {
 };
 
 exports.pictures = function (req, res) {
+    return res.render('manage-pictures', {pictures: []});
+};
 
+exports.picture = {
+    upload: function (req, res) {
+        console.log('uo');
+        var type = req.files.image.type;
+        var path = req.files.image.path;
+        console.log(req.files);
+
+        if (['image/jpeg', 'image/gif', 'image/png'].indexOf(type) === -1) {
+            return res.json({'error': 'invalid image type'});
+        }
+        fs.open(path, 'r', function(err,fd){
+            if (err) return res.json(etc.json.server_problem);
+            console.log(fd);
+        });
+        /*fs.writeFile("/tmp/test", "Hey there!", function(err) {
+         if(err) {
+         console.log(err);
+         } else {
+         console.log("The file was saved!");
+         }
+         });*/
+
+        return res.json({});
+    }
 };

@@ -13,7 +13,8 @@ app.enable('trust proxy');
 
 
 app.use(express.logger('dev'));
-app.use(express.bodyParser());
+app.use(express.limit('20mb'));
+app.use(express.bodyParser({uploadDir:'/tmp'}));
 app.use(express.methodOverride());
 app.use(express.cookieParser(secret.cookieHash));
 app.use(app.router);
@@ -61,19 +62,23 @@ add_route('/article/:link/_comments'                ,  'GET'   ,  article.loadCo
 add_route('/article/:link/_comments'                ,  'POST'  ,  article.comment);
 
 add_route('/control-panel'                          ,  'GET'   ,  control_panel.get);
-add_route('/control-panel/articles'                 ,  'GET'   ,  control_panel.articles);
-add_route('/control-panel/categories'               ,  'GET'   ,  control_panel.categories);
-add_route('/control-panel/pictures'                 ,  'GET'   ,  control_panel.pictures);
 
-add_route('/control-panel/article/create'           ,  'GET'   ,  control_panel.article_editor.new);
-add_route('/control-panel/_articles'                ,  'POST'  ,  control_panel.article_editor.post);
-add_route('/control-panel/article/:link/edit'       ,  'GET'   ,  control_panel.article_editor.existing);
-add_route('/control-panel/_article/:link'           ,  'PATCH' ,  control_panel.article_editor.save);
-add_route('/control-panel/_article/:link/publish'   ,  'PATCH' ,  control_panel.article.changePublishStatus);
-add_route('/control-panel/_article/:link/unpublish' ,  'PATCH' ,  control_panel.article.changePublishStatus);
-add_route('/control-panel/_article/:link'           ,  'DELETE',  control_panel.article.delete);
-add_route('/control-panel/_categories'              ,  'POST'  ,  control_panel.category.post);
-add_route('/control-panel/_category/:name'          ,  'DELETE',  control_panel.category.delete);
+add_route('/control-panel/articles'                 ,  'GET'   ,  control_panel.articles);
+    add_route('/control-panel/article/create'           ,  'GET'   ,  control_panel.article_editor.new);
+    add_route('/control-panel/_articles'                ,  'POST'  ,  control_panel.article_editor.post);
+    add_route('/control-panel/article/:link/edit'       ,  'GET'   ,  control_panel.article_editor.existing);
+    add_route('/control-panel/_article/:link'           ,  'PATCH' ,  control_panel.article_editor.save);
+    add_route('/control-panel/_article/:link/publish'   ,  'PATCH' ,  control_panel.article.changePublishStatus);
+    add_route('/control-panel/_article/:link/unpublish' ,  'PATCH' ,  control_panel.article.changePublishStatus);
+    add_route('/control-panel/_article/:link'           ,  'DELETE',  control_panel.article.delete);
+
+
+add_route('/control-panel/categories'               ,  'GET'   ,  control_panel.categories);
+    add_route('/control-panel/_categories'              ,  'POST'  ,  control_panel.category.post);
+    add_route('/control-panel/_category/:name'          ,  'DELETE',  control_panel.category.delete);
+
+add_route('/control-panel/pictures'                 ,  'GET'   ,  control_panel.pictures);
+    add_route('/control-panel/pictures/_upload'         ,  'POST'  , control_panel.picture.upload);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));

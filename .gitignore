@@ -1,6 +1,10 @@
 .idea
 .DS_Store
+start.dSYM
 *.pyc
+/static/imgs/stored/original/*
+/static/imgs/stored/desktop/*
+/static/imgs/stored/mobile/*
 node_modules
 secret.js
 

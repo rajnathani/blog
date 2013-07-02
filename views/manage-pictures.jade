@@ -2,8 +2,12 @@ extends layout
 block right_side
     #right-side.no-animation
         #control-panel
-            h1.gab Control Panel
-            #cp-nav.slide-left
-              a.hover-link.gab(href='/control-panel/articles') Articles
-              a.hover-link.gab(href='/control-panel/categories') Categories
-              a.hover-link.gab(href='/control-panel/pictures') Pictures
+            h1.gab
+                a(href='/control-panel') Control Panel
+                |  > Pictures
+            .gab.manage-nav
+                button#bu-form-upload-picture.hover-link Upload
+            .pictures-grid
+                - each picture in pictures
+                    div(style='background-image: url("#{picture}");')
+
