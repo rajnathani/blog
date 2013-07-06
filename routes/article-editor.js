@@ -5,6 +5,7 @@ var _ = require('underscore');
 var marked = require('marked');
 
 
+
 function linkify(title) {
     return title.replace(/[^\w \-]/g, " ").
         replace(/[\s]+/g, " ").replace(/ /g, "-");
@@ -17,14 +18,15 @@ function linkify(title) {
  callback(error,categories,db)
  error -> error from mongodb
  categories -> array of categories
+ Categories -> the mongodb collection: Categories
  db -> mongodb db connection
  */
 function allCategories(callback) {
     etc.startMongoDB('Categories', function (err, Categories, db) {
-        if (err) return callback(err, null, null);
+        if (err) return callback(err, null, null, null);
         Categories.find({}, {'_id': 1}).toArray(function (err, categories) {
-            if (err) return callback(err, null, db);
-            return callback(err, etc.primaryKeysList(categories), db);
+            if (err) return callback(err, null, Categories, db);
+            return callback(err, etc.primaryKeysList(categories), Categories, db);
         });
     });
 }
@@ -49,7 +51,7 @@ function uniqueLink(generated_link, similar_links_dict_array) {
 
 
 exports.new = function (req, res) {
-    allCategories(function (err, all_categories, db) {
+    allCategories(function (err, all_categories, Categories, db) {
         if (err) return res.send(etc.msg.server_problem);
         return res.render('article-editor', {article: {title: "", markdown: "", created: 0, updated: 0,
             published: false, categories: []}, all_categories: all_categories, article_created: false});
@@ -62,49 +64,70 @@ exports.post = function (req, res) {
     // The max of 200 is arbitrary as of now
     var title = af.xvalidate('title', 'body', {size: [1, 200]});
     var markdown = af.xvalidate('markdown', 'body', {size: [0, 999999999]});
-    var categories = af.xvalidate('categories', 'body');
-
-
+    var categories = af.xvalidate('categories', 'body', {'type': 'array'});
 
 
     if (!af.isValid()) {
+        console.log([title, markdown, categories]);
         return res.json(etc.json.fishy);
     }
 
 
     var generated_link = linkify(title);
 
-    allCategories(function (err, all_categories, db) {
+    allCategories(function (err, all_categories, Categories, db) {
         if (err) return res.json(etc.json.server_problem);
         if (_.difference(categories, all_categories).length) {
             return res.json({'error': 'unidentified categories found'})
         }
         db.collection('Articles', function (err, Articles) {
-            if (err) return res.json(etc.json.server_problem);
+            if (err) {
+                db.close();
+                return res.send("", 500)
+            }
             Articles.find({_id: new RegExp('^' + generated_link)}, {_id: 1}).toArray(function (err, similar_links_dict_array) {
                 console.log(similar_links_dict_array);
-                if (err) return res.json(etc.json.server_problem);
+                if (err) {
+                    db.close();
+                    return res.send("", 500)
+                }
                 var unique_link = uniqueLink(generated_link, similar_links_dict_array);
-                Articles.insert({_id: unique_link, title: title, markdown: markdown, categories: categories,
-                        content: markdown, published: false,
-                        created: etc.currentTimestamp(), updated: etc.currentTimestamp()},
-                    function (err) {
-                        if (err) return res.json(etc.json.server_problem);
-                        db.collection('ArticleComments', function (err, ArticleComments) {
-                            if (err) return res.json(etc.json.server_problem);
-                            ArticleComments.insert({_id:unique_link, 'comments': []}, function (err) {
-                                return res.json({link: unique_link});
+                marked(markdown, {}, function (err, content) {
+                    if (err) {
+                        db.close();
+                        return res.send("", 500)
+                    }
+                    Articles.insert({_id: unique_link, title: title, markdown: markdown, categories: categories,
+                            content: content, published: false,
+                            created: etc.currentTimestamp(), updated: etc.currentTimestamp()},
+                        function (err) {
+                            if (err) {
+                                db.close();
+                                return res.json(500, {});
+                            }
+                            db.collection('ArticleComments', function (err, ArticleComments) {
+                                if (err) {
+                                    db.close();
+                                    return res.json(500, {});
+                                }
+                                ArticleComments.insert({_id: unique_link, 'comments': []}, function (err) {
+                                    if (err) {
+                                        db.close();
+                                        return res.json(500, {});
+                                    }
+                                    updateCategoriesCollection(unique_link, categories, Categories);
+                                    return res.json({link: unique_link});
 
+                                })
                             })
-                        })
 
-                    });
+                        });
+
+                });
             })
 
         });
     });
-
-
 };
 
 exports.existing = function (req, res) {
@@ -116,14 +139,26 @@ exports.existing = function (req, res) {
         return res.send(404, etc.msg['404']);
     }
 
-    allCategories(function (err, all_categories, db) {
-        if (err) return res.send(500, etc.msg.server_problem);
+    allCategories(function (err, all_categories, Categories, db) {
+        if (err) {
+            db.close();
+            return res.send(500, "");
+        }
+
 
         db.collection('Articles', function (err, Articles) {
-            if (err) return res.send(500, etc.msg.server_problem);
+            if (err) {
+                db.close();
+                return res.send(500, "");
+            }
+
 
             Articles.findOne({_id: link}, {content: 0}, function (err, article) {
-                if (err) return res.send(500, etc.msg.server_problem);
+                if (err) {
+                    db.close();
+                    return res.send(500, "");
+                }
+
                 if (!article) return res.send(404, etc.msg['404']);
 
                 return res.render('article-editor', {article: article, all_categories: all_categories, article_created: true});
@@ -148,22 +183,52 @@ exports.save = function (req, res) {
         console.log([title, markdown, categories]);
         return res.json(etc.json.fishy);
     }
+    console.log('reached');
 
-
-    allCategories(function (err, all_categories, db) {
+    allCategories(function (err, all_categories, Categories, db) {
         if (err) return res.json(etc.json.server_problem);
         if (_.difference(categories, all_categories).length) {
             return res.json({'error': 'unidentified categories found'})
         }
         db.collection('Articles', function (err, Articles) {
-            if (err) return res.json(etc.json.server_problem);
-            Articles.update({_id: link}, { $set: {title: title, markdown: markdown, categories: categories,
-                    content: markdown,
-                    updated: etc.currentTimestamp()}},
-                function (err) {
-                    if (err) return res.json(etc.json.server_problem);
-                    return res.json(etc.json.empty);
-                });
+            if (err) {
+                db.close();
+                return res.json(500, {});
+            }
+            marked(markdown, {}, function (err, content) {
+                if (err) {
+                    console.log('errrr');
+                    db.close();
+                    return res.send("", 500)
+                }
+
+                console.log('kjnkbjhbj');
+                Articles.update({_id: link}, { $set: {title: title, markdown: markdown, categories: categories,
+                        content: content,
+                        updated: etc.currentTimestamp()}},
+
+                    function (err) {
+
+                        if (err) {
+                            db.close();
+                            return res.json(500, {});
+                        }
+
+                        updateCategoriesCollection(link, categories, Categories);
+
+                        return res.json({});
+                    });
+            });
+
         })
     });
 };
+
+function updateCategoriesCollection(link, categories, Categories) {
+    Categories.update({}, {$pull: {articles: link}}, function () {
+        for (var i in categories) {
+            Categories.update({_id: categories[i]}, {$addToSet: {articles: link}}, function (err) {
+            });
+        }
+    });
+}

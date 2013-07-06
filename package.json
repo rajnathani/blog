@@ -20,7 +20,8 @@
 	"jade":"latest",
 	"gravatar":"latest",
 	"marked":"latest",
-	"underscore":"latest"
+	"underscore":"latest",
+	"canvas": "latest"
   },
 
   "author": "relfor",

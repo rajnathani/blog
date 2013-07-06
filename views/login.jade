@@ -1,0 +1,11 @@
+extends layout
+
+block right_side
+    div#right-side.no-animation
+        form(action="/login",method="post")
+            input(type="password", name="password", placeholder="password")
+            div.color(style="display:#{incorrect_password}") Incorrect Password!
+    script.
+        window.addEventListener('load', function(){
+          $('input[type=password]').focus();
+        });

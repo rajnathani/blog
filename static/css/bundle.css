@@ -43,6 +43,30 @@
 }
 
 
+@font-face {
+    font-family: 'Source Code Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Source Code Pro'), local('SourceCodePro-Regular'), url(http://themes.googleusercontent.com/static/fonts/sourcecodepro/v3/mrl8jkM18OlOQN8JLgasD9Hq-FFgoDNV3GTKpHwuvtI.woff) format('woff');
+}
+@font-face {
+    font-family: 'Source Code Pro';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Source Code Pro Medium'), local('SourceCodePro-Medium'), url(http://themes.googleusercontent.com/static/fonts/sourcecodepro/v3/leqv3v-yTsJNC7nFznSMqbIHYkLmgtPJP77jcqN9P08.woff) format('woff');
+}
+@font-face {
+    font-family: 'Source Code Pro';
+    font-style: normal;
+    font-weight: 600;
+    src: local('Source Code Pro Semibold'), local('SourceCodePro-Semibold'), url(http://themes.googleusercontent.com/static/fonts/sourcecodepro/v3/leqv3v-yTsJNC7nFznSMqSmgpmuQqK2I-L2S9cF65Ek.woff) format('woff');
+}
+@font-face {
+    font-family: 'Source Code Pro';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Source Code Pro Bold'), local('SourceCodePro-Bold'), url(http://themes.googleusercontent.com/static/fonts/sourcecodepro/v3/leqv3v-yTsJNC7nFznSMqYqjGYJUyOXcBwUQbRaNH6c.woff) format('woff');
+}
 
 /* @group Base */
 .chzn-container {
@@ -933,13 +957,13 @@ h6 {
     line-height: 1.5em;
 }
 
-.article-content li {
+.article-content ul > li {
     margin: 5px 0 5px 21px;
+    list-style: circle;
 }
 
 .article-content ul,
-.article-content table,
-.article-content pre {
+.article-content table {
     width: 100%;
     margin: 10px 0;
 }
@@ -1100,7 +1124,7 @@ div.category-sprite {
     width: 670px;
 }
 
-#articles li {
+#articles > li {
     margin-bottom: 40px;
     list-style-type: none;
 }
@@ -1454,6 +1478,64 @@ div.category-sprite {
 
 .bu-reply-comment {
     float: right;
+}/* Pretty printing styles. Used with prettify.js. */
+/* Vim sunburst theme by David Leibovic */
+
+pre .str { color: #65B042; } /* string  - green */
+pre .kwd { color: #E28964; } /* keyword - dark pink */
+pre .com { color: #AEAEAE; font-style: italic; } /* comment - gray */
+pre .typ { color: #89bdff; } /* type - light blue */
+pre .lit { color: #3387CC; } /* literal - blue */
+pre .pun { color: #fff; } /* punctuation - white */
+pre .pln { color: #fff; } /* plaintext - white */
+pre .tag { color: #89bdff; } /* html/xml tag    - light blue */
+pre .atn { color: #bdb76b; } /* html/xml attribute name  - khaki */
+pre .atv { color: #65B042; } /* html/xml attribute value - green */
+pre .dec { color: #3387CC; } /* decimal - blue */
+
+pre, code {
+
+    font-family: 'Source Code Pro', monospace;
+}
+
+pre {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 10px auto;
+    padding: 100px 0 100px 80px;
+
+
+
+    background-color: rgb(40,40,40);
+    color:whitesmoke;
+    border-radius: 100%;
+
+    border-radius: 5px;
+    padding:20px;
+
+
+    white-space: pre;
+
+}
+
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums { margin-top: 0; margin-bottom: 0; color: #AEAEAE; } /* IE indents via margin-left */
+li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 { list-style-type: none }
+/* Alternate shading for lines */
+li.L1,li.L3,li.L5,li.L7,li.L9 { }
+
+@media print {
+    pre .str { color: #060; }
+    pre .kwd { color: #006; font-weight: bold; }
+    pre .com { color: #600; font-style: italic; }
+    pre .typ { color: #404; font-weight: bold; }
+    pre .lit { color: #044; }
+    pre .pun { color: #440; }
+    pre .pln { color: #000; }
+    pre .tag { color: #006; font-weight: bold; }
+    pre .atn { color: #404; }
+    pre .atv { color: #060; }
 }@media (max-width: 1220px) and (min-width:1155px) {
     #articles li >div:last-child {
         width: 200px;

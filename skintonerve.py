@@ -24,7 +24,7 @@ JS_SRC_BUNDLE_NAME = "src.js"
 # remaining js files, it can be guaranteed that
 # these files will be loaded before.
 JS_LIB_FILES = ['oneminute.js', 'cook.js', 'popscript.js',
-                'chosen.jquery.min.js', 'page-down.js', 'jquery.autosize-min.js',
+                'chosen.jquery.min.js', 'marked.js', 'jquery.autosize-min.js', 'prettify.js',
                 'core.js']
 
 # files to be excluded in the bundle as it this will
@@ -35,7 +35,7 @@ JS_LIB_FILES = ['oneminute.js', 'cook.js', 'popscript.js',
 JS_IGNORE = ['jquery.js']
 
 # all css files, which will be added in order
-CSS_FILES = ['fonts.css', 'chosen.css', 'animations.css', 'popscript.css', 'core.css', 'responsive.css']
+CSS_FILES = ['fonts.css', 'chosen.css', 'animations.css', 'popscript.css', 'core.css', 'prettify.css', 'responsive.css']
 
 REQ_STATIC_SUB_FOLDERS = [CSS_FOLDER_NAME, JS_FOLDER_NAME, IMGS_FOLDER_NAME]
 for req in REQ_STATIC_SUB_FOLDERS:

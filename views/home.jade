@@ -8,7 +8,7 @@ block right_side
                     div
                         h1.article-head
                             a.hover-link(href="/article/#{article._id}") #{article.title}
-                        div.article-content #{article.content}
+                        div.article-content !{article.content}
                     div.article-meta
                         div(data-timestamp="#{article.created}", data-time-mode="1")
                         div.categories

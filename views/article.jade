@@ -5,7 +5,7 @@ block right_side
         .article.cf
             div
                 h1.article-head #{article.title}
-                .article-content #{article.content}
+                .article-content !{article.content}
             .article-meta
                 div(data-timestamp='#{article.created}', data-time-mode='1')
                 .categories

@@ -2,7 +2,9 @@ var etc = require('../helpers/etc');
 var article_editor = require('../routes/article-editor');
 var AirForm = require('../helpers/air-form');
 
-var fs = require('fs');
+//var fs = require('fs');
+
+//var Canvas= require('canvas');
 
 exports.article_editor = article_editor;
 
@@ -136,7 +138,7 @@ exports.pictures = function (req, res) {
 
 exports.picture = {
     upload: function (req, res) {
-        console.log('uo');
+
         var type = req.files.image.type;
         var path = req.files.image.path;
         console.log(req.files);
@@ -144,10 +146,23 @@ exports.picture = {
         if (['image/jpeg', 'image/gif', 'image/png'].indexOf(type) === -1) {
             return res.json({'error': 'invalid image type'});
         }
-        fs.open(path, 'r', function(err,fd){
-            if (err) return res.json(etc.json.server_problem);
-            console.log(fd);
-        });
+
+        var details = req.files.image;
+        im.resize({
+                            srcPath:path,
+                            dstPath:"../static/imgs/original/"+path.match(/\/tmp\/([^]+)/)[1],
+                            width:'50%'
+
+
+                       }, function(err, stdout, stderr){
+                        console.log(err);
+                       if (err) {
+                                return res.send("",500);
+                                }
+
+                        return res.json({});
+                          });
+
         /*fs.writeFile("/tmp/test", "Hey there!", function(err) {
          if(err) {
          console.log(err);
@@ -156,6 +171,6 @@ exports.picture = {
          }
          });*/
 
-        return res.json({});
+
     }
 };

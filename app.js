@@ -30,6 +30,18 @@ function add_route(route, verb, action) {
 
     //var final_action = etc.blockProtector(action);
     var final_action = action;
+    if (route.match(/^\/control-panel/)){
+
+        final_action = function(req,res){
+            if (!session_key || req.signedCookies.relfor !== session_key) {
+
+                return res.redirect('/login');
+            } else {
+
+                return action(req,res);
+            }
+        }
+    }
 
     switch (verb.toLowerCase()) {
         case 'get':
@@ -48,9 +60,13 @@ function add_route(route, verb, action) {
 }
 
 
+session_key=undefined;
+
 var home = require('./routes/home');
 var article = require('./routes/article');
+var login = require('./routes/login');
 var control_panel = require('./routes/control-panel');
+
 
 
 
@@ -61,6 +77,8 @@ add_route('/article/:link'                          ,  'GET'   ,  article.get);
 add_route('/article/:link/_comments'                ,  'GET'   ,  article.loadComments);
 add_route('/article/:link/_comments'                ,  'POST'  ,  article.comment);
 
+add_route('/login'                                  ,  'GET'  ,  login.get);
+add_route('/login'                                  ,  'POST'  ,  login.post);
 add_route('/control-panel'                          ,  'GET'   ,  control_panel.get);
 
 add_route('/control-panel/articles'                 ,  'GET'   ,  control_panel.articles);
@@ -79,6 +97,8 @@ add_route('/control-panel/categories'               ,  'GET'   ,  control_panel.
 
 add_route('/control-panel/pictures'                 ,  'GET'   ,  control_panel.pictures);
     add_route('/control-panel/pictures/_upload'         ,  'POST'  , control_panel.picture.upload);
+
+add_route('/logout'                                 ,  'GET'   , function(req,res){res.clearCookie('relfor', {}); res.redirect('/')});
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));

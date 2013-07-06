@@ -1,3 +1,4 @@
 
 
 - add database close calls where missing
+- include html meta for articles
