@@ -21,7 +21,8 @@
 	"gravatar":"latest",
 	"marked":"latest",
 	"underscore":"latest",
-	"canvas": "latest"
+	
+	"redis": "latest"
   },
 
   "author": "relfor",

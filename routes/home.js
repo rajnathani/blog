@@ -1,6 +1,8 @@
 var etc = require('../helpers/etc');
 var AirForm = require('../helpers/air-form');
 
+var redis = require('redis');
+
 exports.get = function (req, res) {
 
     etc.startMongoDB('Articles', function (err, Articles, db) {
@@ -24,6 +26,8 @@ exports.get = function (req, res) {
 
 exports.infiniteScroll = function (req, res) {
     var af = new AirForm(req);
+
+
 
     var last_link = af.xvalidate('last_link', 'query');
     var timestamp = parseInt(af.xvalidate('timestamp', 'query', {'has to be': ['int']}));

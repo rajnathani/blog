@@ -455,10 +455,26 @@
     }
 }
 
+@-webkit-keyframes fly-in {
+    from {
+        -webkit-transform:rotate(150deg);
+    }
+    to {
+        -webkit-transform:rotate(0deg);
+    }
+}
 
 
 
-/**animations**/
+
+@keyframes fly-in {
+    from {
+        transform:rotate(150deg);
+    }
+    to {
+        transform:rotate(0deg);
+    }
+}/**animations**/
 
 @-webkit-keyframes in-backy {
     from {
@@ -962,6 +978,8 @@ h6 {
     list-style: circle;
 }
 
+
+
 .article-content ul,
 .article-content table {
     width: 100%;
@@ -1013,8 +1031,12 @@ h6 {
     cursor: default;
     font-size: 40px;
     text-align: right;
-
 }
+
+#head-logo:active, a:active{
+   -webkit-transform:translate(0, 3px);
+}
+
 
 #left-nav {
     margin-top: 35px;
@@ -1045,71 +1067,6 @@ h6 {
     color: #ff475a !important;
 }
 
-div.icon-sprite-holder {
-    position: absolute;
-    height: 24px;
-    width: 24px;
-    background-image: url('../imgs/nav-icons-sprite.png');
-    background-repeat: no-repeat;
-}
-
-div.article-sprite {
-    background-position: 0 -25px;
-}
-
-div.task-sprite {
-    background-position: 0 -48px;
-}
-
-div.home-sprite {
-    background-position: 0 -1px;
-}
-
-div.members-sprite {
-    background-position: 0 -73px;
-}
-
-div.category-sprite {
-    background-position: 0 -101px;
-}
-
-#search-suggestions li {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    padding: 8px;
-    padding-right: 20px;
-    width: 100%;
-    background-color: white;
-}
-
-#search-suggestions {
-    display: none;
-    width: 200px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    position: absolute;
-    background-color: transparent;
-
-    z-index: 10;
-}
-
-#search-suggestions li {
-    position: relative;
-    cursor: pointer;
-    list-style-type: none;
-
-}
-
-#search-suggestions li#spotlight {
-    background-colo: #facbe5;
-    color: #ff475a;
-}
-
-/*Sprites*/
-#search-suggestions li > div {
-    right: 0px;
-    top: 6px;
-}
 
 #right-side {
     box-sizing: border-box;
@@ -1478,7 +1435,176 @@ div.category-sprite {
 
 .bu-reply-comment {
     float: right;
-}/* Pretty printing styles. Used with prettify.js. */
+}div[class*="icon-"]{
+    position: absolute;
+    transition:all 300ms;
+    -webkit-transition:all 300ms;
+
+}
+
+.search-items li:hover{
+    color: #ff475a;
+    cursor: pointer;
+}
+
+div.search-suggestions-icon {
+    height: 24px;
+    width: 24px;
+
+}
+
+div.icon-article {
+    background-color:rgb(40,40,40);
+    background-image:-webkit-linear-gradient(225deg, white, white 11%, transparent 11%, transparent 100%);
+
+}
+
+
+div.icon-article:after{
+    content: "";
+    position: absolute;
+    left:50%;
+
+    margin-left:-31%;
+    width:62%;
+    height:100%;
+
+    background: -webkit-linear-gradient(top,
+    transparent, transparent 20%,
+    white 20%, white 32%,
+    transparent 32%, transparent 44%,
+    white 44%, white 56%,
+    transparent 56%, transparent 68%,
+    white 68%, white 80%,
+    transparent 80%, transparent 100%
+    );
+
+}
+div.icon-category{
+    background-color: rgb(40,40,40);
+}
+
+div.icon-category:before {
+    content:"";
+    position: absolute;
+    width:100%;
+    height:100%;
+    border-radius:6px;
+    -webkit-transform:rotate(45deg);
+    background-color:inherit;
+}
+
+div.icon-category:after{
+    position: absolute;
+    top:50%;
+    margin-top: -0.7em;
+    text-align: center;
+    color:white;
+    content:"C";
+    font-size:1em;
+    width: 100%;
+    font-family: verdana;
+}
+
+#search-suggestions li {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    padding: 8px;
+    padding-right: 20px;
+    width: 100%;
+    background-color: white;
+}
+
+#search-suggestions {
+    display: none;
+    width: 200px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    position: absolute;
+    background-color: transparent;
+
+    z-index: 10;
+}
+
+#search-suggestions li {
+    position: relative;
+    cursor: pointer;
+    list-style-type: none;
+
+}
+
+#search-suggestions li#spotlight {
+
+    color: #ff475a;
+}
+#spotlight .icon-category,
+#spotlight .icon-article,
+.search-items li:hover .icon-category,
+.search-items li:hover .icon-article
+{
+    background-color:#ff475a;
+}
+
+#spotlight .icon-article,
+.search-items li:hover .icon-article
+{
+
+    background-image:none;
+}
+
+#spotlight .icon-category,
+.search-items li:hover .icon-category
+{
+    border-radius: 6px;
+}
+
+#spotlight .icon-category:before,
+.search-items li:hover .icon-category:before
+{
+
+    border-radius: 0;
+}
+
+/*Sprites*/
+#search-suggestions li > div {
+    right: 0px;
+    top: 6px;
+}
+
+#requested-query {
+    margin-bottom: 30px;
+}
+
+#search-results li {
+    min-height: 80px;
+    list-style-type: none;
+    -webkit-animation:fly-in 400ms;
+}
+#search-results div[class*=icon-]{
+    position: absolute;
+    width:50px;
+    height:50px;
+}
+
+
+
+#search-results div[class*=icon-] + div {
+    margin-left: 100px;
+    font-size:20px;
+    -webkit-transition:font-size 50ms;
+
+}
+
+
+#search-results li:hover  div[class*=icon-] + div{
+    margin-left: 105px;
+}
+
+#search-results li:active  div[class*=icon-] + div{
+       font-size: 17px;
+
+}
+/* Pretty printing styles. Used with prettify.js. */
 /* Vim sunburst theme by David Leibovic */
 
 pre .str { color: #65B042; } /* string  - green */

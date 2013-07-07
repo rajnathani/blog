@@ -1,5 +1,7 @@
 var etc = require('../helpers/etc');
 var AirForm = require('../helpers/air-form');
+var redis = require('redis');
+
 
 var _ = require('underscore');
 var marked = require('marked');
@@ -83,19 +85,19 @@ exports.post = function (req, res) {
         db.collection('Articles', function (err, Articles) {
             if (err) {
                 db.close();
-                return res.send("", 500)
+                return res.send(500)
             }
             Articles.find({_id: new RegExp('^' + generated_link)}, {_id: 1}).toArray(function (err, similar_links_dict_array) {
                 console.log(similar_links_dict_array);
                 if (err) {
                     db.close();
-                    return res.send("", 500)
+                    return res.send(500)
                 }
                 var unique_link = uniqueLink(generated_link, similar_links_dict_array);
                 marked(markdown, {}, function (err, content) {
                     if (err) {
                         db.close();
-                        return res.send("", 500)
+                        return res.send( 500)
                     }
                     Articles.insert({_id: unique_link, title: title, markdown: markdown, categories: categories,
                             content: content, published: false,
@@ -103,19 +105,21 @@ exports.post = function (req, res) {
                         function (err) {
                             if (err) {
                                 db.close();
-                                return res.json(500, {});
+                                return res.json(500);
                             }
                             db.collection('ArticleComments', function (err, ArticleComments) {
                                 if (err) {
                                     db.close();
-                                    return res.json(500, {});
+                                    return res.json(500);
                                 }
                                 ArticleComments.insert({_id: unique_link, 'comments': []}, function (err) {
                                     if (err) {
                                         db.close();
-                                        return res.json(500, {});
+                                        return res.json(500);
                                     }
                                     updateCategoriesCollection(unique_link, categories, Categories);
+                                    var redis_con = redis.createClient();
+                                    redis_con.sadd(redisKey('index', 'articles'), unique_link, function(){redis_con.end()});
                                     return res.json({link: unique_link});
 
                                 })
@@ -215,7 +219,7 @@ exports.save = function (req, res) {
                         }
 
                         updateCategoriesCollection(link, categories, Categories);
-
+                        redis_con.sadd(redisKey('index', 'articles'), unique_link, function(){redis_con.end()});
                         return res.json({});
                     });
             });
