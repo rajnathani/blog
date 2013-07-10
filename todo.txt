@@ -2,3 +2,5 @@
 
 - add database close calls where missing
 - include html meta for articles
+- fix large article content problem
+- fix issue: search -> other keywords empty with query one word followed by space(s)

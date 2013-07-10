@@ -1,5 +1,6 @@
 var util = require('util');
 var _ = require('underscore');
+var mongodb = require('mongodb');
 
 var secret = require('../helpers/secret');
 
@@ -8,18 +9,18 @@ function inSandbox() {
 }
 
 exports.startMongoDB = function (collection_name, callback) {
-    var Db = require('mongodb').Db;
-    var Server = require('mongodb').Server;
-
+    var Db = mongodb.Db;
+    var Server = mongodb.Server;
 
     var db = new Db('blog', new Server('127.0.0.1', 27017, { auto_reconnect: true}), {safe:true});
-    db.open(function () {
+    db.open(function (err) {
+        if (err){return callback(err,null)}
         if (collection_name.substring) {
             db.collection(collection_name, function (err, collection) {
                 callback(err, collection, db)
             });
         } else {
-            callback(db);
+            callback(null,db);
         }
 
     });
@@ -64,10 +65,6 @@ exports.generateGUID = function () {
 };
 
 
-exports.cookieJar = function (res, email) {
-    res.cookie('cookie-jar', email, { maxAge: 172800000, httpOnly: false, signed: true});
-};
-
 exports.error = {
     duplicate: 11000
 };
@@ -81,3 +78,19 @@ exports.primaryKeysList = function(dict_array){
       return cur._id;
   });
 };
+
+exports.redisKey = function(db, key){
+    return "blog:" + db + (key ? (":" + key) : "");
+};
+
+
+exports.mongoArrayToShortDict = function (mongo_array, target) {
+    var dict = {};
+    var item;
+    for (var i = 0; i < mongo_array.length; i++) {
+        item = mongo_array[i];
+        dict[item._id] = item[target];
+    }
+
+    return dict;
+}

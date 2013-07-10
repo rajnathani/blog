@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html dir="ltr">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta description="Relfor's Blog: where he shares a tiny bit of his life.">
-    <meta keywords="relfor">
     <title>Relfor</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/bundle.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/bundle.css"/>
+
 </head>
 <body>
+
 <div id="content">
     <div id="left-side">
-        <h1 id="head-logo"><a href="/">Relfor</a>
+        <h1 id="head-logo"><a href="/">Relfor</a></h1>
 
-            <div id="left-nav"><a href="/about" class="hover-link selected-nav">About</a><a href="/projects" class="hover-link">Projects</a>
+        <div id="left-nav">
+            <a class="selected-nav hover-link" href="/about">About</a>
+            <a href="/projects" class="hover-link">Projects</a>
 
-                <form id="search-form" method="get" action="/search"><input id="query" value="Search" type="text"
-                                                                            name="query" autocomplete="off"
-                                                                            class="hover-link"></form>
-                <ul id="search-suggestions"></ul>
-            </div>
-        </h1>
+            <form id="search-form" method="get" action="/search"><input value="Search" type="text" id="query"
+                                                                        class="hover-link"
+                                                                        name="query"
+                                                                        autocomplete="off"/></form>
+            <ul id="search-suggestions"></ul>
+        </div>
+
     </div>
     <div id="right-side" class="constricted">
         <div id="about-area">
@@ -29,17 +31,110 @@
             <ul>
                 <li>
                     <h6 class="gab">Areas of Technical Expertise</h6>
-                    <ul>
-                        <li>Web Design (CSS3)</li>
-                        <li>Front End Programming (Javascript, jQuery)</li>
-                        <li>Console Programming (C, Python, Java, Objective C)</li>
-                        <li>Desktop Application Programming (Python)</li>
-                        <li>Web Development (Flask, Django & CGI (Python) Express (Node.js))</li>
-                        <li>Databases and Query Languages (MySQL, PostgresSQL, sqllite, MongoDB, XML, XPath, XQuery)
+                    <ul id="tech-list">
+                        <li><span>Web Design</span>
+                        <ul>
+                            <li>CSS3</li>
+                        </ul>
                         </li>
-                        <li>Version Control (SVN &amp; Git)</li>
-                        <li>Unix Shell Scripting (Bash)</li>
-                        <li>AWS (EC2, SES, RDS, & S3)</li>
+
+                        <li><span>Front End Programming</span>
+                        <ul>
+                             <li>Javascript (plain)</li>
+                             <li>jQuery</li>
+                            <li>AngularJS (undeployed in a project)</li>
+                        </ul>
+                        </li>
+                        <li><span>Console Programming</span>
+                            <ul>
+                                <li>Python</li>
+                                <li>C</li>
+                                <li>Java</li>
+                            </ul>
+                        </li>
+
+                        <li><span>Desktop Application Programming</span>
+                        <ul>
+                            <li>
+                                Python (TkInter & PyGame)
+                            </li>
+                        </ul>
+                        </li>
+                        <li><span>Web Development</span>
+                        <ul>
+                            <li>Python
+                                <ul>
+                                    <li>CGI</li>
+                                    <li>Flask</li>
+                                    <li>Django (undeployed in a project)</li>
+                                </ul>
+                            </li>
+                            <li>
+                                Node.js
+                                <ul>
+                                    <li>ExpressJS</li>
+                                </ul>
+
+                            </li>
+
+                        </ul>
+                        </li>
+                        <li><span>Databases and Query Languages</span>
+                            <ul>
+                                <li>
+                                Relational Databases
+                                    <ul>
+                                        <li>MySQL (high number of deployments)</li>
+                                        <li>PostgreSQL (undeployed in a project)</li>
+                                    </ul>
+                                    </li>
+                                <li>
+                                    NoSQL Databases
+                                    <ul>
+                                        <li>MongoDB (this blog runs on it)</li>
+                                        <li>Redis</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    Miscellaneous
+                                    <ul>
+                                        <li>XML Parsing (xPath & xQuery)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><span>Version Control</span>
+                        <ul>
+                            <li>
+                            Git
+                            </li>
+                            <li>
+                                Subversion (undeployed in a project)
+                            </li>
+                        </ul>
+                        </li>
+                        <li><span>Unix Command Line</span>
+                        <ul>
+                            <li>Bash Scripting</li>
+                            <li>Crontab</li>
+                            <li>Shorewall</li>
+                        </ul>
+                        </li>
+                        <li><span>Cloud</span>
+                        <ul>
+                            <li>AWS (Amazon Web Services)
+                                <ul>
+                                    <li>EC2</li>
+                                    <li>SES</li>
+                                    <li>RDS</li>
+                                    <li>S3</li>
+                                </ul>
+                            </li>
+                            <li>Azure (VMs)
+                            </li>
+                        </ul>
+                        </li>
+
                     </ul>
                 </li>
                 <li>
@@ -59,14 +154,14 @@
                 </li>
                 <li>
                     <h6 class="gab">Open Source Work</h6>
-                    Almost every framework, language or library we use is Open Source. Its
+                    Almost every framework, language or library we use is free and open source. Its
                     one of the greatest revolutions which has ever taken place.<br>
                     Besides uploading whatever code I can publicly for others to use, I've made
                     a few project level contributions:
                     <ul>
-                        <li><a href="http://oneminute.relfor.co">oneminute</a></li>
-                        <li><a href="http://popscript.relfor.co">popscript</a></li>
-                        <li><a href="http://cook.relfor.co">cook</a></li>
+                        <li><a href="http://oneminute.relfor.co" class="hover-link">oneminute</a></li>
+                        <li><a href="http://popscript.relfor.co" class="hover-link">popscript</a></li>
+                        <li><a href="http://cook.relfor.co" class="hover-link">cook</a></li>
                     </ul>
                 </li>
                 <li>
@@ -83,11 +178,10 @@
             <h6 class="gab">Contact?</h6>
             You can contact me by sending an email to me@relfor.co
         </div>
-
     </div>
 </div>
 <script defer src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script defer src="../static/js/lib.js"></script>
-<script defer src="../static/js/src.js"></script>
+<script defer src="/static/js/lib.js"></script>
+<script defer src="/static/js/src.js"></script>
 </body>
 </html>

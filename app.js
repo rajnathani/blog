@@ -7,7 +7,8 @@ var secret = require('./helpers/secret');
 var app = express();
 
 
-app.set('port', parseInt(process.argv.splice(2)[0]));
+
+app.set('port', parseInt(process.argv[2]));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.enable('trust proxy');
@@ -30,7 +31,6 @@ if ('development' == app.get('env')) {
 
 
 redisKey = function(db, key){
-
     return "blog:" + db + (key ? (":" + key) : "");
 };
 
@@ -59,7 +59,7 @@ function blockProtector(req,res, cb){
             redis_con.end();
             return res.send(500);
         }
-        console.log(result);
+
         if (result){
             redis_con.end();
             return res.send("Baah! Too many requests! Wait a few seconds!",429);
@@ -124,6 +124,7 @@ live = !__dirname.match(/Users/);
 
 var home = require('./routes/home');
 var article = require('./routes/article');
+var search = require('./routes/search');
 var login = require('./routes/login');
 var control_panel = require('./routes/control-panel');
 
@@ -137,6 +138,8 @@ add_route('/_'                                          ,  'GET'   ,  home.infin
 add_route('/article/:link'                              ,  'GET'   ,  article.get, 4);
 add_route('/article/:link/_comments'                    ,  'GET'   ,  article.loadComments, 4);
 add_route('/article/:link/_comments'                    ,  'POST'  ,  article.comment, 50);
+
+add_route('/_search'                                    ,   'GET'   , search.searchSuggestion);
 
 add_route('/login'                                      ,  'GET'   ,  login.get, 10);
 add_route('/login'                                      ,  'POST'  ,  login.post, 20);

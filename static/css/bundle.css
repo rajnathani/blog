@@ -68,7 +68,14 @@
     src: local('Source Code Pro Bold'), local('SourceCodePro-Bold'), url(http://themes.googleusercontent.com/static/fonts/sourcecodepro/v3/leqv3v-yTsJNC7nFznSMqYqjGYJUyOXcBwUQbRaNH6c.woff) format('woff');
 }
 
-/* @group Base */
+
+
+@font-face {
+    font-family: 'Oleo Script';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Oleo Script'), local('OleoScript-Regular'), url(http://themes.googleusercontent.com/static/fonts/oleoscript/v2/_weQNDK6Uf40CiGFKBBUjrrIa-7acMAeDBVuclsi6Gc.woff) format('woff');
+}/* @group Base */
 .chzn-container {
   font-size: 16px;
   position: relative;
@@ -437,6 +444,48 @@
   }
 }
 /* @end */
+
+@-webkit-keyframes slide-left-fade-in {
+    from {
+        -webkit-transform: translate(25px, 0);
+        opacity: 0.2;
+    }
+    to {
+        -webkit-transform: translate(0, 0);
+    }
+}
+
+@-webkit-keyframes slide-right-fade-in {
+    from {
+        -webkit-transform: translate(-25px, 0);
+        opacity: 0.2;
+    }
+    to {
+        -webkit-transform: translate(0, 0);
+    }
+}
+
+@-webkit-keyframes slide-down-fade-in {
+    from {
+        -webkit-transform: translate(0, -25px);
+        opacity: 0.2;
+    }
+    to {
+        -webkit-transform: translate(0, 0);
+    }
+}
+
+@-webkit-keyframes logo-show {
+    0% {
+
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+
+        -webkit-transform: rotate(360deg);
+    }
+
+}
 
 @-webkit-keyframes fade-in-out {
     from {
@@ -890,48 +939,6 @@ h6 {
     font-size: inherit;
 }
 
-@-webkit-keyframes slide-left-fade-in {
-    from {
-        -webkit-transform: translate(25px, 0);
-        opacity: 0.2;
-    }
-    to {
-        -webkit-transform: translate(0, 0);
-    }
-}
-
-@-webkit-keyframes slide-right-fade-in {
-    from {
-        -webkit-transform: translate(-25px, 0);
-        opacity: 0.2;
-    }
-    to {
-        -webkit-transform: translate(0, 0);
-    }
-}
-
-@-webkit-keyframes slide-down-fade-in {
-    from {
-        -webkit-transform: translate(0, -25px);
-        opacity: 0.2;
-    }
-    to {
-        -webkit-transform: translate(0, 0);
-    }
-}
-
-@-webkit-keyframes logo-show {
-    0% {
-
-        -webkit-transform: rotate(0deg);
-    }
-    100% {
-
-        -webkit-transform: rotate(360deg);
-    }
-
-}
-
 /* Source: http://nicolasgallagher.com/micro-clearfix-hack/ */
 
 .cf:before,
@@ -1058,8 +1065,8 @@ h6 {
     font-size: 20px;
     color: gray;
 
-    -webkit-transition: all 200ms;
-    transition: all 200ms;
+    -webkit-transition: color 200ms;
+    transition: color 200ms;
 }
 
 #left-nav a.selected-nav {
@@ -1147,31 +1154,79 @@ h6 {
 
 #about-area {
     padding-bottom: 80px;
+    -webkit-user-select:none;
+    user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
 }
 
 #about-area, #about-area *, .projects, .projects * {
     line-height: 1.5em;
 }
 
-#about-area > ul > li {
-    margin-top: 15px;
-
-}
-
 #about-area li {
     margin-left: 22px;
 }
 
+#about-area > ul:first-of-type > li {
+    argin-left:0;
+    margin-top: 15px;
+    list-style-type: upper-roman;
+
+}
+
+
+#tech-list > li > span:hover{
+    cursor:pointer;
+    color:#ff475a;
+    -webkit-transition:color 100ms;
+    transition:color 100ms;
+}
+
+
+
+#tech-list > li {
+    position: relative;
+    list-style-type: none;
+}
+#tech-list > li > span:before {
+    position: absolute;
+    left:-18px;
+    content: ">";
+}
+#tech-list > li.down > span:before {
+
+    content: "<";
+}
+
+
+
+#tech-list > li.down > span:after {
+
+    content: " >";
+}
+
+
+#tech-list li li {
+    list-style-type: circle;
+    -webkit-animation:slide-left-fade-in 200ms;
+}
+
+#tech-list  li li li{
+    list-style-type: lower-roman;
+}
+
+
 .projects-category {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .project-list li {
+    position: relative;
     margin-left: 0;
     margin-bottom: 50px;
-    height: 100px;
+    height: 130px;
     list-style-type: none;
-    text-align: right;
     -webkit-animation: slide-right-fade-in 520ms;
 }
 
@@ -1180,22 +1235,96 @@ h6 {
     -webkit-animation: slide-left-fade-in 520ms;
 }
 
-.project-list li p {
-    display: none;
+
+.project-list:first-of-type li {
+    text-align: right;
 }
 
-.project-list li img {
+.project-list:not(:first-of-type) li {
+    text-align: left;
+}
+
+.project-list li div {
     display: block;
-    float: left;
+    clear:both;
+
+    max-width:400px;
+
+}
+.project-list:first-of-type li div {
+    float:right;
+}
+
+.project-list:not(:first-of-type) li div {
+    float:left;
+}
+
+.project-list li div p:first-child{
+    font-style: italic;
+}
+
+.project-list li div p:nth-child(2):before{
+    content: "Developed: ";
+
+
+}
+.project-list li div p:nth-child(3):before{
+    content: "Role: ";
+
+}
+
+
+.project-list li img,
+.project-list li .project-image
+{
+display: block;
+position: absolute;
+
     height: 50px;
 
 }
 
-.project-list li:nth-child(even) img {
-    display: block;
-    float: left;
-    height: 50px;
+.project-list:first-of-type li img,
+.project-list:first-of-type li .project-image
+{
+    left:0;
 
+}
+.project-list:not(:first-of-type) li img,
+.project-list:not(:first-of-type) li .project-image
+{
+    right:0;
+
+}
+
+
+.project-image[data-project="cook"]{
+    top:5px;
+    height: 100px;
+    width:200px;
+    text-align: center;
+
+    background-color: #ff2723;
+    /*background-image: -webkit-repeating-linear-gradient(left, #ff3e3f 0%, #ff2e2e 50%);*/
+    background-image: -webkit-repeating-linear-gradient(right, rgb(255, 63, 63) 0%, rgb(255, 63, 63) 50%, rgb(255, 46, 46) 50%, rgb(255, 46, 46) 100%);
+
+    background-image: -ms-repeating-linear-gradient(right, rgb(255, 63, 63) 0%, rgb(255, 63, 63) 50%, rgb(255, 46, 46) 50%, rgb(255, 46, 46) 100%);
+    background-image: repeating-linear-gradient(right, rgb(255, 63, 63) 0%, rgb(255, 63, 63) 50%, rgb(255, 46, 46) 50%, rgb(255, 46, 46) 100%);
+    color: #dcdcdc;
+
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Oleo Script', verdana,sans-serif;
+    font-size: 25px;
+}
+
+
+.project-image[data-project]:after{
+    position: absolute;
+    display: block;
+    width:100%;
+    top:15%;
+    text-align: center;
+    content:"COOK.JS";
 }
 
 #control-panel > h1 {
@@ -1597,7 +1726,7 @@ div.icon-category:after{
 
 
 #search-results li:hover  div[class*=icon-] + div{
-    margin-left: 105px;
+    font-size: 22px;
 }
 
 #search-results li:active  div[class*=icon-] + div{

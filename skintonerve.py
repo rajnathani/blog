@@ -35,7 +35,8 @@ JS_LIB_FILES = ['oneminute.js', 'cook.js', 'popscript.js',
 JS_IGNORE = ['jquery.js']
 
 # all css files, which will be added in order
-CSS_FILES = ['fonts.css', 'chosen.css', 'animations.css', 'popscript.css', 'core.css', 'search.css', 'prettify.css', 'responsive.css']
+CSS_FILES = ['fonts.css', 'chosen.css', 'animations.css', 'popscript.css', 'core.css', 'search.css', 'prettify.css',
+             'responsive.css']
 
 REQ_STATIC_SUB_FOLDERS = [CSS_FOLDER_NAME, JS_FOLDER_NAME, IMGS_FOLDER_NAME]
 for req in REQ_STATIC_SUB_FOLDERS:

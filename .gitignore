@@ -2,6 +2,7 @@
 .DS_Store
 start.dSYM
 *.pyc
+*.rdb
 /static/imgs/stored/original/*
 /static/imgs/stored/desktop/*
 /static/imgs/stored/mobile/*

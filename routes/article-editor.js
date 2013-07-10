@@ -187,7 +187,6 @@ exports.save = function (req, res) {
         console.log([title, markdown, categories]);
         return res.json(etc.json.fishy);
     }
-    console.log('reached');
 
     allCategories(function (err, all_categories, Categories, db) {
         if (err) return res.json(etc.json.server_problem);
@@ -201,12 +200,10 @@ exports.save = function (req, res) {
             }
             marked(markdown, {}, function (err, content) {
                 if (err) {
-                    console.log('errrr');
                     db.close();
                     return res.send("", 500)
                 }
 
-                console.log('kjnkbjhbj');
                 Articles.update({_id: link}, { $set: {title: title, markdown: markdown, categories: categories,
                         content: content,
                         updated: etc.currentTimestamp()}},
@@ -215,11 +212,13 @@ exports.save = function (req, res) {
 
                         if (err) {
                             db.close();
-                            return res.json(500, {});
+                            return res.json(500);
                         }
 
                         updateCategoriesCollection(link, categories, Categories);
-                        redis_con.sadd(redisKey('index', 'articles'), unique_link, function(){redis_con.end()});
+
+                        var redis_con = redis.createClient();
+                        redis_con.sadd(redisKey('index', 'articles'), link, function(){redis_con.end()});
                         return res.json({});
                     });
             });

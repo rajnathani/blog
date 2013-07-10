@@ -2,6 +2,7 @@ var etc = require('../helpers/etc');
 var article_editor = require('../routes/article-editor');
 var AirForm = require('../helpers/air-form');
 
+var redis = require('redis');
 //var fs = require('fs');
 
 //var Canvas= require('canvas');
@@ -41,6 +42,10 @@ exports.article = {
             Articles.update({_id: link}, {$set: {published: publish}}, function (err) {
                 db.close();
                 if (err) return res.json(etc.msg.server_problem);
+                var redis_con = redis.createClient();
+                redis_con.sadd(redisKey('index', 'articles'), link, function () {
+                    redis_con.end()
+                });
                 return res.json(etc.json.empty);
             });
         });
@@ -93,7 +98,13 @@ exports.category = {
             }
             Categories.insert({_id: name, articles: []}, function (err) {
                 db.close();
+
                 if (err) return res.json(etc.json.server_problem);
+                var redis_con = redis.createClient();
+                redis_con.sadd(redisKey('index', 'categories'), name, function () {
+                    redis_con.end()
+                });
+
                 return res.json({});
             });
         })
@@ -110,10 +121,25 @@ exports.category = {
                 if (err) return res.json(etc.json.server_problem);
                 db.collection('Articles', function (err, Articles) {
                     if (err) return res.json({'etc': 'Server Problem: Deletion process incomplete, categories undeleted from articles'});
-                    Articles.update({}, {$pull: {categories: name}}, {multi: true}, function (err) {
-                        db.close();
-                        if (err) return res.json({'etc': 'Server Problem: Deletion process incomplete, categories undeleted from articles'});
-                        return res.json({});
+                    var redis_con = redis.createClient();
+                    Articles.find({categories: {$all: [name]}}).toArray(function (err, articles_to_update) {
+                        if (!err) {
+                            for (var i = 0; i < articles_to_update.length; i++) {
+                                console.log(articles_to_update[i]);
+                                    redis_con.sadd(redisKey('index', 'articles'), articles_to_update[i]._id, function () {
+                                });
+                            }
+                        }
+                        Articles.update({}, {$pull: {categories: name}}, {multi: true}, function (err) {
+                            db.close();
+                            if (err) return res.json({'etc': 'Server Problem: Deletion process incomplete, categories undeleted from articles'});
+
+                            redis_con.sadd(redisKey('index', 'categories'), name, function () {
+                                redis_con.end()
+                            });
+                            return res.json({});
+
+                        });
 
                     });
                 });
@@ -141,7 +167,7 @@ exports.picture = {
 
         var type = req.files.image.type;
         var path = req.files.image.path;
-        console.log(req.files);
+        //console.log(req.files);
 
         if (['image/jpeg', 'image/gif', 'image/png'].indexOf(type) === -1) {
             return res.json({'error': 'invalid image type'});
@@ -149,19 +175,19 @@ exports.picture = {
 
         var details = req.files.image;
         im.resize({
-                            srcPath:path,
-                            dstPath:"../static/imgs/original/"+path.match(/\/tmp\/([^]+)/)[1],
-                            width:'50%'
+            srcPath: path,
+            dstPath: "../static/imgs/original/" + path.match(/\/tmp\/([^]+)/)[1],
+            width: '50%'
 
 
-                       }, function(err, stdout, stderr){
-                        console.log(err);
-                       if (err) {
-                                return res.send("",500);
-                                }
+        }, function (err, stdout, stderr) {
+            console.log(err);
+            if (err) {
+                return res.send("", 500);
+            }
 
-                        return res.json({});
-                          });
+            return res.json({});
+        });
 
         /*fs.writeFile("/tmp/test", "Hey there!", function(err) {
          if(err) {
