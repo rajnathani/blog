@@ -77,6 +77,11 @@ exports.article = {
                     Articles.remove({_id: link}, function (err) {
                         db.close();
                         if (err) return res.json({'error': error_only_comments_deleted});
+                        var redis_con = redis.createClient();
+                        redis_con.sadd(redisKey('index', 'articles'), link, function () {
+                            redis_con.end()
+                        });
+
                         return res.json(etc.json.empty);
                     });
                 })
@@ -126,7 +131,7 @@ exports.category = {
                         if (!err) {
                             for (var i = 0; i < articles_to_update.length; i++) {
                                 console.log(articles_to_update[i]);
-                                    redis_con.sadd(redisKey('index', 'articles'), articles_to_update[i]._id, function () {
+                                redis_con.sadd(redisKey('index', 'articles'), articles_to_update[i]._id, function () {
                                 });
                             }
                         }
