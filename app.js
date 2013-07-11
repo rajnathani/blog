@@ -54,7 +54,7 @@ function increaseActivity(ip, amount, redis_con){
 
 function blockProtector(req,res, cb){
     var redis_con = redis.createClient();
-    redis_con.get(redisKey('blocked', req.ip), function(err,result){
+    redis_con.get(redisKey('blocked', req.ips[0]), function(err,result){
         if (err) {
             redis_con.end();
             return res.send(500);
@@ -81,10 +81,10 @@ function add_route(route, verb, action, activity_level) {
         final_action = function(req,res){
             return blockProtector(req,res, function(redis_con){
                 if (!session_key || req.signedCookies.relfor !== session_key) {
-                increaseActivity(req.ip, 10, redis_con);
+                increaseActivity(req.ips[0], 10, redis_con);
                 return res.redirect('/login');
             } else {
-                increaseActivity(req.ip, activity_level, redis_con);
+                increaseActivity(req.ips[0], activity_level, redis_con);
                 return action(req,res, redis_con);
             }
             });
@@ -93,7 +93,7 @@ function add_route(route, verb, action, activity_level) {
     } else {
         final_action = function(req,res) {
             return blockProtector(req,res, function(redis_con){
-                increaseActivity(req.ip, activity_level, redis_con);
+                increaseActivity(req.ips[0], activity_level, redis_con);
                 return action(req,res);
             });
         }
@@ -125,6 +125,7 @@ live = !__dirname.match(/Users/);
 var home = require('./routes/home');
 var article = require('./routes/article');
 var verify = require('./routes/verify');
+var category = require('./routes/category');
 var search = require('./routes/search');
 var login = require('./routes/login');
 var control_panel = require('./routes/control-panel');
@@ -144,6 +145,8 @@ add_route('/verify/comment'                             ,  'GET'   , verify.comm
 
 add_route('/_search'                                    ,  'GET'   , search.searchSuggestion);
 add_route('/search'                                     ,  'GET'   , search.get);
+
+add_route('/category/:name'                             ,   'GET'  , category.get, 3);
 
 add_route('/login'                                      ,  'GET'   ,  login.get, 10);
 add_route('/login'                                      ,  'POST'  ,  login.post, 20);
