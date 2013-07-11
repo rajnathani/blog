@@ -12,18 +12,4 @@ block right_side
                         div #{entity[2]}
 
     script.
-        document.querySelector('input').value = document.getElementById('search-queried').innerText;
-        window.addEventListener('load', function(){
-           $('input').focus();
-            $('#search-suggestions').empty();
-            // Credits to mr.Y https://groups.google.com/forum/#!topic/jquery-ui-layout/h1tfKuaIIbY
-            if (window.getSelection) {
-                if (window.getSelection().empty) {  // Chrome
-                    window.getSelection().empty();
-                } else if (window.getSelection().removeAllRanges) {  // Firefox
-                    window.getSelection().removeAllRanges();
-                }
-            } else if (document.selection) {  // IE?
-                document.selection.empty();
-            }
-        });
+        document.getElementById('query').value = document.getElementById('search-queried').innerText;
