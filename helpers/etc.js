@@ -1,6 +1,8 @@
 var util = require('util');
 var _ = require('underscore');
 var mongodb = require('mongodb');
+var AmazonSES = require('amazon-ses');
+
 
 var secret = require('../helpers/secret');
 
@@ -93,4 +95,50 @@ exports.mongoArrayToShortDict = function (mongo_array, target) {
     }
 
     return dict;
-}
+};
+
+
+ exports.redisKeyComment = function(link, comment_id, parent_comment_id){
+     return redisKey('verify:comment:' +
+         (parent_comment_id ? ('reply') : ('nonreply')) +
+         ":" + link,
+         (parent_comment_id ? (parent_comment_id + ":") : ('')) +
+          comment_id);
+ };
+
+
+exports.listHasCommentID = function(list, comment_id) {
+    for (var i = 0; i < list.length; i++) {
+
+        if (list[i].comment_id === comment_id) {
+            return list[i];
+        }
+    }
+    return false;
+};
+
+
+
+
+
+exports.email = function (to, subject, body, callback, extras) {
+    if (!extras) extras = {};
+    var ses = new AmazonSES(secret.aws.access_key_id, secret.aws.secret_access_key);
+    ses.send({
+        from: 'Relfor\'s Blog <me@relfor.co>',
+        to: to.substring ? [to] : to,
+        subject: subject,
+        replyTo: extras.reply_to ? (extras.reply_to.substring ? [extras.reply_to] : extras.reply_to) : undefined,
+        body: {
+            html: body
+        }
+    }, function (err, data) {
+        if (err) {
+            return console.log(err.message);
+        }
+
+        if (callback !== undefined) {
+            callback();
+        }
+    });
+};

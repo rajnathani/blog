@@ -124,6 +124,7 @@ live = !__dirname.match(/Users/);
 
 var home = require('./routes/home');
 var article = require('./routes/article');
+var verify = require('./routes/verify');
 var search = require('./routes/search');
 var login = require('./routes/login');
 var control_panel = require('./routes/control-panel');
@@ -136,10 +137,13 @@ add_route('/'                                           ,  'GET'   ,  home.get);
 add_route('/_'                                          ,  'GET'   ,  home.infiniteScroll);
 
 add_route('/article/:link'                              ,  'GET'   ,  article.get, 4);
-add_route('/article/:link/_comments'                    ,  'GET'   ,  article.loadComments, 4);
-add_route('/article/:link/_comments'                    ,  'POST'  ,  article.comment, 50);
+    add_route('/article/:link/_comments'                ,  'GET'   ,  article.loadComments, 4);
+    add_route('/article/:link/_comments'                ,  'POST'  ,  article.comment, 50);
 
-add_route('/_search'                                    ,   'GET'   , search.searchSuggestion);
+add_route('/verify/comment'                             ,  'GET'   , verify.comment, 20);
+
+add_route('/_search'                                    ,  'GET'   , search.searchSuggestion);
+add_route('/search'                                     ,  'GET'   , search.get);
 
 add_route('/login'                                      ,  'GET'   ,  login.get, 10);
 add_route('/login'                                      ,  'POST'  ,  login.post, 20);

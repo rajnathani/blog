@@ -17,7 +17,7 @@ html(dir="ltr")
                     a.hover-link(href='/about') About
                     a.hover-link(href='/projects') Projects
                     form#search-form(method='get', action='/search')
-                        input#query.hover-link(value='Search', type='text', name='query', autocomplete='off')
+                        input#query.hover-link(value='Search', type='text', name='query', maxlength='100', autocomplete='off')
                     ul#search-suggestions
             block right_side
 

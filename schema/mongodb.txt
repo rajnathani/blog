@@ -1,12 +1,12 @@
 Articles:
-    link (_id)
+    link (_id) #url path name
     title
     content
-    created
-    updated
+    created (int)
+    updated (int)
     categories (list of strings)
     markdown
-    published
+    published (boolean)
 
 ArticleComments:
     link (_id)
@@ -17,7 +17,8 @@ ArticleComments:
         name
         website
         content
-        created
+        created (int)
+        verified (boolean)
         replies (list of dictionaries)
             comment_id
             email
@@ -25,7 +26,8 @@ ArticleComments:
             name
             website
             content
-            created
+            created (int)
+            verified (boolean)
 
 Categories
     category (_id)

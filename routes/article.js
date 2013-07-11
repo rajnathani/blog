@@ -1,7 +1,12 @@
-var etc = require('../helpers/etc');
-var gravatar = require('gravatar');
-var AirForm = require('../helpers/air-form');
+var url = require('url');
+var util = require('util');
 var _ = require('underscore');
+var gravatar = require('gravatar');
+var redis = require('redis');
+
+var etc = require('../helpers/etc');
+var AirForm = require('../helpers/air-form');
+
 
 exports.get = function (req, res) {
     var af = new AirForm(req);
@@ -11,7 +16,6 @@ exports.get = function (req, res) {
     if (af.nullExists([link])) {
         return res.send(404, etc.msg['404']);
     }
-
     etc.startMongoDB('Articles', function (err, Articles, db) {
             if (err) {
                 db.close();
@@ -67,7 +71,7 @@ exports.comment = function (req, res) {
     var email = af.xvalidate('email', 'body', {size: [1, 255], 'has to be': ['email']   });
     var website = af.xvalidate('website', 'body', {size: [1, 100], optional: true});
     var content = af.xvalidate('content', 'body', {size: [1, 2000]});
-    var parent_comment_id = af.xvalidate('parent_comment_id', 'body', {'has to be': ['int'], optional: true});
+    var parent_comment_id = af.xvalidate('parent_comment_id', 'body', {'type': 'number', optional: true});
 
 
     if (!af.isValid()) {
@@ -80,34 +84,36 @@ exports.comment = function (req, res) {
 
     etc.startMongoDB('ArticleComments', function (err, ArticleComments, db) {
         ArticleComments.findOne({_id: link}, function (err, result) {
+
             if (err)
-                return res.json(etc.json.server_problem);
+                return res.send(500);
             if (!result)
-                return res.json(etc.json.fishy);
+                return res.send(403);
 
             var comments = result.comments;
 
 
-            if (reply_comment && !listHasCommentID(comments, parent_comment_id))
-                return res.json(etc.json.fishy);
+            if (reply_comment && !etc.listHasCommentID(comments, parent_comment_id))
+                return res.send(403);
 
             var comment_id = generateCommentID(comments, parent_comment_id);
             var common_comment_dict = {comment_id: comment_id, name: name,
                 email: email, website: website, content: content, img: gravatar.url(email, {s: 70}),
-                created: etc.currentTimestamp()};
+                created: etc.currentTimestamp(), verified: false};
 
-            if (_.contains(['relfor@outlook.com', 'me@relfor.co'], email)){
-                common_comment_dict.relfor =true;
+            if (_.contains(['relfor@outlook.com', 'me@relfor.co'], email)) {
+                common_comment_dict.relfor = true;
+                common_comment_dict.name = 'Relfor';
             }
+
             if (reply_comment) {
-                comments[comments.indexOf(listHasCommentID(comments, parent_comment_id))].replies.push(common_comment_dict);
+                comments[comments.indexOf(etc.listHasCommentID(comments, parent_comment_id))].replies.push(common_comment_dict);
             } else {
                 common_comment_dict.replies = [];
                 comments.push(common_comment_dict);
             }
             ArticleComments.update({'_id': link}, {comments: comments}, {w: 1}, function (err) {
-                if (err)
-                    return res.json(500, {});
+                if (err) return res.send(500);
 
                 delete common_comment_dict.content;
                 delete common_comment_dict.email;
@@ -115,6 +121,29 @@ exports.comment = function (req, res) {
                 delete common_comment_dict.website;
                 delete common_comment_dict.created;
                 delete common_comment_dict.parent_comment_id;
+
+                var generated_token = etc.generateGUID();
+                var redis_con = redis.createClient();
+
+                redis_con.setex(etc.redisKeyComment(link, comment_id, parent_comment_id), 7200,
+                    generated_token);
+                redis_con.quit();
+
+                var verification_link_url = url.format({protocol: 'http',
+                    hostname: 'relfor.co', pathname: '/verify/comment',
+                    query: {token: generated_token, link: link, comment_id: comment_id, parent_comment_id: parent_comment_id}
+                });
+
+                var email_body = util.format(
+                    'To verify your comment:<br>' +
+                        "'%s'<br><br>" +
+                        'Click this link: <a href="%s">%s</a><br><br>'+
+                        'The above link will only last for 2 hours.<br><br>' +
+                        'Thanks for commenting!<br>' +
+                        '-Relfor',
+                    content, verification_link_url, verification_link_url
+                );
+                etc.email(email, 'Comment Confirmation',email_body);
 
                 return res.json(common_comment_dict);
             })
@@ -132,21 +161,13 @@ function generateCommentID(comments, parent_comment_id) {
 
     var reply_comment = isReplyComment(parent_comment_id);
     if (reply_comment) {
-        return maxCommentID(listHasCommentID(comments, parent_comment_id)) + 1;
+        return maxCommentID(etc.listHasCommentID(comments, parent_comment_id)) + 1;
     } else {
         return maxCommentID(comments) + 1;
     }
 
 }
 
-function listHasCommentID(list, comment_id) {
-    for (var i = 0; i < list.length; i++) {
-        if (list[i].comment_id === comment_id) {
-            return list[i];
-        }
-    }
-    return false;
-}
 
 /*
  Precondition: The lowest possible comment_id is 1

@@ -62,10 +62,12 @@ exports.new = function (req, res) {
 
 
 exports.post = function (req, res) {
+
     var af = new AirForm(req);
     // The max of 200 is arbitrary as of now
     var title = af.xvalidate('title', 'body', {size: [1, 200]});
-    var markdown = af.xvalidate('markdown', 'body', {size: [0, 999999999]});
+    var markdown = af.xvalidate('markdown', 'body', {size: [0, 999999999999]});
+
     var categories = af.xvalidate('categories', 'body', {'type': 'array'});
 
 
@@ -146,21 +148,21 @@ exports.existing = function (req, res) {
     allCategories(function (err, all_categories, Categories, db) {
         if (err) {
             db.close();
-            return res.send(500, "");
+            return res.send(500);
         }
 
 
         db.collection('Articles', function (err, Articles) {
             if (err) {
                 db.close();
-                return res.send(500, "");
+                return res.send(500);
             }
 
 
             Articles.findOne({_id: link}, {content: 0}, function (err, article) {
                 if (err) {
                     db.close();
-                    return res.send(500, "");
+                    return res.send(500);
                 }
 
                 if (!article) return res.send(404, etc.msg['404']);
@@ -180,7 +182,7 @@ exports.save = function (req, res) {
     // The max of 200 is arbitrary as of now
     var link = af.xvalidate('link', 'params', {size: [1, 200]});
     var title = af.xvalidate('title', 'body', {size: [1, 200]});
-    var markdown = af.xvalidate('markdown', 'body', {size: [0, 999999999]});
+    var markdown = af.xvalidate('markdown', 'body', {size: [0, 999999999999]});
     var categories = af.xvalidate('categories', 'body', {type: 'array'});
 
     if (!af.isValid()) {

@@ -5,7 +5,7 @@ block right_side
         form(action="/login",method="post")
             input(type="password", name="password", placeholder="password")
             div.color(style="display:#{incorrect_password}") Incorrect Password!
-    script.
-        window.addEventListener('load', function(){
-          $('input[type=password]').focus();
-        });
+script.
+    window.addEventListener('load', function(){
+      $('input[type=password]').focus();
+    });

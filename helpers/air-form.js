@@ -25,6 +25,7 @@ var AirForm = function (req) {
     };
 
     this.validate = function (val, dict) {
+
         if (!dict) {
             dict = {}
         }
@@ -74,7 +75,7 @@ var AirForm = function (req) {
                                     return null;
                                 }
                                 break;
-                            case "int":
+                            case "number-like":
                                 if (isNaN(parseInt(val))) {
                                     this.valid = false;
                                     return null;

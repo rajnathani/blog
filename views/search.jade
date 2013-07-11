@@ -1,0 +1,28 @@
+extends layout
+
+block right_side
+    #right-side.no-animation
+        div#requested-query.gab.px40 Search Query: '#{query}' (#{results.length} hits)
+        ul#search-results.search-items
+            - each entity in results
+                - var entity_type = entity[1] === 'a' ? 'article' : 'category'
+                li
+                    a(href="/#{entity_type}/#{entity[0]}")
+                        div(class="icon-#{entity_type}")
+                        div #{entity[2]}
+
+script.
+    window.addEventListener('load', function(){
+       $('input').focus();
+        $('#search-suggestions').empty();
+        // Credits to mr.Y https://groups.google.com/forum/#!topic/jquery-ui-layout/h1tfKuaIIbY
+        if (window.getSelection) {
+            if (window.getSelection().empty) {  // Chrome
+                window.getSelection().empty();
+            } else if (window.getSelection().removeAllRanges) {  // Firefox
+                window.getSelection().removeAllRanges();
+            }
+        } else if (document.selection) {  // IE?
+            document.selection.empty();
+        }
+    });

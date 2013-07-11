@@ -30,7 +30,7 @@ exports.infiniteScroll = function (req, res) {
 
 
     var last_link = af.xvalidate('last_link', 'query');
-    var timestamp = parseInt(af.xvalidate('timestamp', 'query', {'has to be': ['int']}));
+    var timestamp = af.xvalidate('timestamp', 'query', {'type': 'int'});
 
     if (af.noneNull([last_link, timestamp]))
         etc.startMongoDB('Articles', function (err, Articles, db) {

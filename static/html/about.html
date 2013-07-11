@@ -2,22 +2,22 @@
 <html>
 <head>
     <title>Relfor</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/bundle.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/bundle.css"/>
 
 </head>
 <body>
 
 <div id="content">
     <div id="left-side">
-        <h1 id="head-logo"><a href="/">Relfor</a></h1>
+        <h1 id="head-logo"><a href="home.html">Relfor</a></h1>
 
         <div id="left-nav">
-            <a class="selected-nav hover-link" href="/about">About</a>
-            <a href="/projects" class="hover-link">Projects</a>
+            <a class="selected-nav hover-link" href="about.html">About</a>
+            <a href="projects.html" class="hover-link">Projects</a>
 
             <form id="search-form" method="get" action="/search"><input value="Search" type="text" id="query"
                                                                         class="hover-link"
-                                                                        name="query"
+                                                                        name="query" maxlength="100"
                                                                         autocomplete="off"/></form>
             <ul id="search-suggestions"></ul>
         </div>
@@ -40,9 +40,9 @@
 
                         <li><span>Front End Programming</span>
                         <ul>
-                             <li>Javascript (plain)</li>
+                             <li>Javascript (vanilla)</li>
                              <li>jQuery</li>
-                            <li>AngularJS (undeployed in a project)</li>
+                            <li>Underscore.js</li>
                         </ul>
                         </li>
                         <li><span>Console Programming</span>
@@ -160,7 +160,7 @@
                     a few project level contributions:
                     <ul>
                         <li><a href="http://oneminute.relfor.co" class="hover-link">oneminute</a></li>
-                        <li><a href="http://popscript.relfor.co" class="hover-link">popscript</a></li>
+                        <li><a href="https://github.com/relfor/popscript" class="hover-link">popscript</a></li>
                         <li><a href="http://cook.relfor.co" class="hover-link">cook</a></li>
                     </ul>
                 </li>
@@ -173,8 +173,18 @@
                     That's it for me.
                 </li>
 
+
             </ul>
-            <br>
+                    <br>
+                <h6 class="gab">Stalk Me</h6>
+                Besides this website you can stalk me at:
+                <ul>
+                    <li><a class="hover-link" href="https://github.com/relfor">Github</a></li>
+                    <li><a class="hover-link" href="http://stackoverflow.com/users/2279260/relfor">Stack Overflow</a></li>
+                </ul>
+                         <br>
+
+
             <h6 class="gab">Contact?</h6>
             You can contact me by sending an email to me@relfor.co
         </div>
