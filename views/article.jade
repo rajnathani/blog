@@ -1,5 +1,8 @@
 extends layout
 
+
+block meta_keywords
+    meta(name="keywords", content="#{article.categories.toString()}")
 block meta_description
     meta(name="description", content="#{article.title}")
 
