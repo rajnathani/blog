@@ -1,5 +1,8 @@
 extends layout
 
+block meta_description
+    meta(name="description", content="#{article.title}")
+
 block right_side
     #right-side
         .article.cf
