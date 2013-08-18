@@ -24,6 +24,7 @@ exports.get = function (req, res) {
 
 exports.searchSuggestion = function (req, res) {
     var af = new AirForm(req);
+
     var last_keyword = af.xvalidate('last_keyword', 'query', {size: [1, 20], optional: true});
     var other_keywords = [];
     console.log(req.query.last_keyword);
