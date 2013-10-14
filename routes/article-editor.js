@@ -10,7 +10,7 @@ var marked = require('marked');
 
 function linkify(title) {
     return title.replace(/[^\w \-]/g, " ").
-        replace(/[\s]+/g, " ").replace(/ /g, "-");
+        replace(/[\s]+/g, " ").replace(/ /g, "-").trim('-');
 }
 
 /*
