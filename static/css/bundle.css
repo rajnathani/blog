@@ -1003,8 +1003,12 @@ h6 {
     line-height: 1.5em;
 }
 
+
+.article-content ol > li,
 .article-content ul > li {
-    margin: 5px 0 5px 21px;
+   margin: 5px 0 5px 21px;
+}
+.article-content ul > li {
     list-style: circle;
 }
 
@@ -1596,7 +1600,8 @@ position: absolute;
 
 .bu-reply-comment {
     float: right;
-}div[class*="icon-"]{
+}
+div[class*="icon-"]{
     position: absolute;
     transition:all 300ms;
     -webkit-transition:all 300ms;
