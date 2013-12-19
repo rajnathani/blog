@@ -115,7 +115,6 @@ function add_route(route, verb, action, activity_level) {
 
 
 session_key = undefined;
-
 live = !__dirname.match(/Users/);
 
 
@@ -126,7 +125,6 @@ var category = require('./routes/category');
 var search = require('./routes/search');
 var login = require('./routes/login');
 var control_panel = require('./routes/control-panel');
-
 
 add_route('/', 'GET', home.get);
 add_route('/_', 'GET', home.infiniteScroll);
