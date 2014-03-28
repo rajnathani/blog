@@ -26,7 +26,7 @@ def find_brace(string_input, cur_index, wants):
 
         if not inline_comment_started and char == "'" and not double_quote_started:
             single_quote_started = not single_quote_started
-        if not inline_comment_started and char == '/' and remaining_input[count+1] == '/':
+        if not inline_comment_started and char == '/' and remaining_input[count+1] == '/' and (not (double_quote_started or single_quote_started)):
             inline_comment_started = True
         if (char == '\n') and inline_comment_started:
             inline_comment_started = False
@@ -53,7 +53,7 @@ def nerve_js(string_input):
             break
         start_if_block = find_brace(string_input, if_index, WANT_OPENING_BRACE)
         end_if_block = find_brace(string_input, start_if_block+1, WANT_CLOSING_BRACE)
-
+        
         start_else_block = find_brace(string_input, end_if_block+1, WANT_OPENING_BRACE)
         if start_else_block and 'else' in string_input[end_if_block:start_else_block]:
             end_else_block = find_brace(string_input, start_else_block+1, WANT_CLOSING_BRACE)

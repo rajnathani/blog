@@ -1,0 +1,102 @@
+!!! 5
+html
+    head
+        title Relfor
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width')
+        link(rel='stylesheet', type='text/css', href='../static/css/bundle.css')
+    body
+        #content
+            #left-side
+                h1#head-logo
+                    a(href='/') Relfor
+                #left-nav
+                    a.hover-link(href='/about') About
+                    a.selected-nav.hover-link(href='/projects') Projects
+                    form#search-form(method='get', action='/search')
+                        input#query.hover-link(value='Search', type='text', name='query', maxlength='100', autocomplete='off')
+                    ul#search-suggestions
+            #right-side.constricted.projects.no-animation
+                .projects-category Projects done since November 2011:
+                ul.project-list
+                    li
+                        img(src='../static/imgs/course_run_head.png')
+                        h4.gab
+                            a.hover-link(href='http://courserun.ca') Course Run
+                        div
+                            p
+                                | Course Search & Filter Engine for
+                                br
+                                | University of Toronto students.
+                            p November 2011 - August 2012
+                            p Founder & Developer
+                    //li
+                        img(src='../static/imgs/innis-box.png')
+                        h4.gab
+                            a.hover-link(href='http://innisbox.com') Innis Box
+                        div
+                            p
+                                | Article and Task Management System
+                                br
+                                | for the Innis College Registrar.
+                            p March 2013 - July 2013
+                            p Freelance Developer
+                    li
+                        img(src='../static/imgs/torbok.png')
+                        h4.gab
+                            a.hover-link(href='http://torbok.com') Torbok
+                        div
+                            p
+                                | Book Trading Network for students studying at
+                                br
+                                | Universities across Greater Toronto Area.
+                            p May 2013
+                            p Founder & Developer
+                    li
+                        img(src='../static/imgs/sgsc-main-logo.png')
+                        h4.gab
+                            a.hover-link(href='http://uoftsquash.com') University of Toronto Squash Club
+                        div
+                            p
+                                | Presentational website and social network for a squash club at University of Toronto.
+                            p February 2011 - December 2012 & October 2013
+                            p Voluntary Developer
+                .projects-category Open Source
+                ul.project-list
+                    li
+                        img(src='../static/imgs/oneminute.png')
+                        h4.gab
+                            a.hover-link(href='http://oneminute.relfor.co') oneminute.js
+                        div
+                            p
+                                | An open source (BSD) JavaScript library which converts integer timestamps to meaningful text conveying
+                                | time differences, and/or dates.
+                            p December 2012 - May 2013
+                            p Creator
+                    li
+                        img(src='../static/imgs/popscript.png')
+                        h4.gab
+                            a.hover-link(href='http://popscript.relfor.co') PopScript
+                        div
+                            p
+                                | HTML5 library for creating modal boxes, lightboxes, dropdown menus, tooltips, and any other dynamic element, with support for animations, lightweight with zero dependencies. (MIT licensed)
+                            p March 2013 - March 2014
+                            p Creator
+
+                    li
+                        .project-image(data-project='cook')
+                        h4.gab
+                            a.hover-link(href='http://cook.relfor.co') Cook
+                        div
+                            p
+                                | A BSD licensed open source JavaScript library providing functions to facilitate
+                                | easier creation of DOM elements, on the browser side.
+                            p November 2012 - June 2013
+                            p Creator
+                .projects-category
+                    | The remaining which includes fiddles, upcoming open sources projects
+                    | (keep an eye on popscript.js!), and the source of this blog can be found on my
+                    a.normal-link(href='https://github.com/relfor') Github account.
+        script(defer='defer', src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
+        script(defer='defer', src='/static/js/lib.js')
+        script(defer='defer', src='/static/js/src.js')

@@ -25,6 +25,7 @@ exports.get = function (req, res) {
                 db.close();
                 if (err) return res.send(500, etc.msg.server_problem);
                 if (!article) return res.send(404, etc.msg['404']);
+                article.str_categories = article.categories.toString();
                 return res.render('article.jade', {article: article});
             })
         }

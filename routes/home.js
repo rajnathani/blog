@@ -28,9 +28,8 @@ exports.infiniteScroll = function (req, res) {
     var af = new AirForm(req);
 
 
-
     var last_link = af.xvalidate('last_link', 'query');
-    var timestamp = af.xvalidate('timestamp', 'query', {'type': 'int'});
+    var timestamp = parseInt(af.xvalidate('timestamp', 'query', {'type': 'int'}));
 
     if (af.noneNull([last_link, timestamp]))
         etc.startMongoDB('Articles', function (err, Articles, db) {

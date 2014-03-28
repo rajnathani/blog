@@ -127,6 +127,9 @@ var login = require('./routes/login');
 var control_panel = require('./routes/control-panel');
 
 add_route('/', 'GET', home.get);
+add_route('/about', 'GET', function(req,res){return res.render('about')});
+add_route('/projects', 'GET', function(req,res){return res.render('projects')});
+
 add_route('/_', 'GET', home.infiniteScroll);
 
 add_route('/article/:link', 'GET', article.get, 4);

@@ -2,7 +2,7 @@ extends layout
 
 
 block meta_keywords
-    meta(name="keywords", content="#{article.categories.toString()}")
+    meta(name="keywords", content="#{article.str_categories}")
 block meta_description
     meta(name="description", content="#{article.title}")
 
