@@ -20,7 +20,9 @@ html
                 #about-area
                     | Hey its Relfor.
                     br
-                    | I'm a 19 year old developer, currently
+                    | I'm a&nbsp;
+                    span(id='age')
+                    | &nbsp;year old developer, currently
                     | studying in Toronto.
                     br
                     ul
@@ -151,3 +153,14 @@ html
         script(defer='defer', src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
         script(defer='defer', src='/static/js/lib.js')
         script(defer='defer', src='/static/js/src.js')
+        script
+            var born = new Date('Oct 19 1993')
+            var age = document.getElementById('age');
+            var year_ms = 1000*60*60*24*365;
+            var calc_age =function(){
+                age.innerHTML = String((new Date()-born)/year_ms).substr(0,11);
+            };
+            calc_age();
+            setInterval(calc_age,1000);
+
+
