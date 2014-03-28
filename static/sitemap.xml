@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<url>
+  <loc>http://relfor.co/</loc>
+</url>
+<url>
+  <loc>http://relfor.co/about</loc>
+</url>
+<url>
+  <loc>http://relfor.co/projects</loc>
+</url>
+<url>
+  <loc>http://relfor.co/article/What-does-non-blocking-IO-mean-in-node-js-</loc>
+</url>
+<url>
+  <loc>http://relfor.co/category/non-blocking</loc>
+</url>
+<url>
+  <loc>http://relfor.co/category/nodejs</loc>
+</url>
+<url>
+  <loc>http://relfor.co/article/Bye-GitHub-</loc>
+</url>
+<url>
+  <loc>http://relfor.co/category/services</loc>
+</url>
+<url>
+  <loc>http://relfor.co/article/Abstracting-Databases-and-Tables-in-Redis</loc>
+</url>
+<url>
+  <loc>http://relfor.co/category/redis</loc>
+</url>
+<url>
+  <loc>http://relfor.co/article/Why-jQuery-is-called-jQuery</loc>
+</url>
+<url>
+  <loc>http://relfor.co/category/jQuery</loc>
+</url>
+<url>
+  <loc>http://relfor.co/category/xQuery</loc>
+</url>
+<url>
+  <loc>http://relfor.co/category/naming</loc>
+</url>
+</urlset>
